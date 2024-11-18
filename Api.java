@@ -10,7 +10,7 @@ public class Api {
             HttpClient client = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://docs.coincap.io/"))
+                    .uri(URI.create("https://api.coincap.io/v2/assets"))
                     .header("Accept", "application/json")
                     .build();
 
