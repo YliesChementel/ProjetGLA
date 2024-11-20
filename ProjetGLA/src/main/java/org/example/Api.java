@@ -27,10 +27,17 @@ public class Api {
         }
     }
 
-
+    private static boolean tableExists(Connection conn, String tableName) {
+        try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null)) {
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 
     private static void insertIntoCrypto(Connection conn, String id,String symbol, String name) {
-        String sql = "INSERT INTO Crypto(id, symbol, name) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO Crypto(id, symbol, name) VALUES(?, ?, ?)" + "ON CONFLICT(id) DO NOTHING";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
@@ -58,8 +65,6 @@ public class Api {
         }
     }
 
-
-
     public static void main(String[] args) {
         try {
             HttpClient client = HttpClient.newHttpClient();
@@ -71,7 +76,9 @@ public class Api {
             String cryptoDB = "jdbc:sqlite:Crypto.db";
             String cryptoDataDB = "jdbc:sqlite:CryptoData.db";
             try (Connection conn = DriverManager.getConnection(cryptoDB)) {
-                createCrypto(conn);
+                if (!tableExists(conn, "Crypto")) {
+                    createCrypto(conn);
+                }
             }
             catch (SQLException e) {
                 System.out.println(e.getMessage());
