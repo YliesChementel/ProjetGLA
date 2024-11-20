@@ -27,6 +27,24 @@ public class Api {
         }
     }
 
+    private static void createCryptoData(Connection conn) {
+        String sql = "CREATE TABLE IF NOT EXISTS CryptoData (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "crypto_id TEXT NOT NULL," +
+                "rank INTEGER NOT NULL," +
+                "volume DECIMAL(30,10)," +
+                "price DECIMAL(30,10)," +
+                "fetchTime TIMESTAMP NOT NULL," +
+                "FOREIGN KEY(crypto_id) REFERENCES Crypto(id));";
+
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("Table 'CryptoData' créée !");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private static boolean tableExists(Connection conn, String tableName) {
         try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null)) {
             return rs.next();
@@ -50,15 +68,44 @@ public class Api {
         }
     }
 
+    private static void insertIntoCryptoData(Connection conn, String cryptoId, int rank, double volume, double price, String fetchTime) {
+        String sql = "INSERT INTO CryptoData(crypto_id, rank, volume, price, fetchTime) VALUES(?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, cryptoId);
+            pstmt.setInt(2, rank);
+            pstmt.setDouble(3, volume);
+            pstmt.setDouble(4, price);
+            pstmt.setString(5, fetchTime);
+            pstmt.executeUpdate();
+            System.out.println("Données insérées dans 'CryptoData': " + cryptoId + ", " + rank + ", " + volume + ", " + price + ", " + fetchTime);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private static void displayCrypto(Connection conn) {
         String sql = "SELECT id, symbol, name FROM Crypto";
 
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
-            // Afficher les données
             while (rs.next()) {
                 System.out.println("ID: " + rs.getString("id") + ", Symbole: " + rs.getString("symbol") + ", Nom: " + rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void displayCryptoData(Connection conn) {
+        String sql = "SELECT id, crypto_id, rank, volume, price, fetchTime FROM CryptoData";
+
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getString("id") + ", CryptoId: " + rs.getString("crypto_id") + ", Rank: " + rs.getString("rank") + ", Volume: " + rs.getString("volume") + ", Price: " + rs.getString("price") + ", FetchTime: " + rs.getString("fetchTime"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -80,8 +127,11 @@ public class Api {
                     createCrypto(conn);
                 }
             }
-            catch (SQLException e) {
-                System.out.println(e.getMessage());
+
+            try (Connection conn2 = DriverManager.getConnection(cryptoDataDB)) {
+                if (!tableExists(conn2, "CryptoData")) {
+                    createCryptoData(conn2);
+                }
             }
             while (true) {
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -93,27 +143,33 @@ public class Api {
 
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                 LocalDateTime now = LocalDateTime.now();
-                System.out.println(dtf.format(now));
+                String fetchTime = dtf.format(now);
+                System.out.println(fetchTime);
 
+                try (Connection conn = DriverManager.getConnection(cryptoDB);
+                     Connection conn2 = DriverManager.getConnection(cryptoDataDB)) {
 
-                try (Connection conn = DriverManager.getConnection(cryptoDB)) {
-                    for(int i=0; i<5; i++) {
-                        String bitcoinId = assets.getJSONObject(i).getString("id");
-                        String bitcoinRank = assets.getJSONObject(i).getString("rank");
-                        String bitcoinSymbol = assets.getJSONObject(i).getString("symbol");
-                        String bitcoinName = assets.getJSONObject(i).getString("name");
-                        String bitcoinVolume = assets.getJSONObject(i).getString("volumeUsd24Hr");
-                        String bitcoinPrice = assets.getJSONObject(i).getString("priceUsd");
-                        if (conn != null) {
-                            insertIntoCrypto(conn, bitcoinId, bitcoinSymbol,bitcoinName);
-                            displayCrypto(conn);
-                        }
+                    for (int i = 0; i < 5; i++) {
+                        JSONObject asset = assets.getJSONObject(i);
+
+                        String id = asset.getString("id");
+                        String symbol = asset.getString("symbol");
+                        String name = asset.getString("name");
+                        int rank = Integer.parseInt(asset.getString("rank"));
+                        double volume = asset.optDouble("volumeUsd24Hr", 0.0);
+                        double price = asset.optDouble("priceUsd", 0.0);
+
+                        insertIntoCrypto(conn, id, symbol, name);
+                        insertIntoCryptoData(conn2, id, rank, volume, price, fetchTime);
                     }
+
+                    displayCrypto(conn);
+                    displayCryptoData(conn2);
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
 
-            Thread.sleep(20000);  // 30 secondes
+            Thread.sleep(10000);  // 20 secondes
             }
 
         } catch (Exception e) {
