@@ -121,18 +121,15 @@ public class Api {
                     .build();
 
             String cryptoDB = "jdbc:sqlite:Crypto.db";
-            String cryptoDataDB = "jdbc:sqlite:CryptoData.db";
             try (Connection conn = DriverManager.getConnection(cryptoDB)) {
                 if (!tableExists(conn, "Crypto")) {
                     createCrypto(conn);
                 }
-            }
-
-            try (Connection conn2 = DriverManager.getConnection(cryptoDataDB)) {
-                if (!tableExists(conn2, "CryptoData")) {
-                    createCryptoData(conn2);
+                if (!tableExists(conn, "CryptoData")) {
+                    createCryptoData(conn);
                 }
             }
+
             while (true) {
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 System.out.println("Statut de la réponse: " + response.statusCode());
@@ -146,8 +143,7 @@ public class Api {
                 String fetchTime = dtf.format(now);
                 System.out.println(fetchTime);
 
-                try (Connection conn = DriverManager.getConnection(cryptoDB);
-                     Connection conn2 = DriverManager.getConnection(cryptoDataDB)) {
+                try (Connection conn = DriverManager.getConnection(cryptoDB)) {
 
                     for (int i = 0; i < 5; i++) {
                         JSONObject asset = assets.getJSONObject(i);
@@ -160,16 +156,16 @@ public class Api {
                         double price = asset.optDouble("priceUsd", 0.0);
 
                         insertIntoCrypto(conn, id, symbol, name);
-                        insertIntoCryptoData(conn2, id, rank, volume, price, fetchTime);
+                        insertIntoCryptoData(conn, id, rank, volume, price, fetchTime);
                     }
 
                     displayCrypto(conn);
-                    displayCryptoData(conn2);
+                    displayCryptoData(conn);
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
 
-            Thread.sleep(10000);  // 20 secondes
+            Thread.sleep(1000);  // 1 seconde
             }
 
         } catch (Exception e) {
