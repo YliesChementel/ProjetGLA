@@ -25,8 +25,26 @@
             {% endfor %}
         </tbody>
     </table>
+	<h1>Évolution du Prix des Bitcoin</h1>
 	
-	<h1>Données des Cryptomonnaies</h1>
+		{{ graphPriceBTC|safe }}
+		
+		{{ graphPriceETH|safe }}
+	
+		{{ graphPriceUDST|safe }}
+		
+		{{ graphPriceSOL|safe }}
+		
+		{{ graphPriceBNB|safe }}
+		
+	
+    <!-- Afficher le graphique -->
+		{{ graphPriceBTC|safe }}
+	
+</body>
+</html>
+
+<!--	<h1>Données des Cryptomonnaies</h1>
     <table border="1">
         <thead>
             <tr>
@@ -50,8 +68,4 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table>
-	
-</body>
-</html>
-
+    </table> -->
