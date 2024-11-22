@@ -2,10 +2,56 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marchés de Cryptomonnaies</title>
 </head>
 <body>
-    <h1>Graphiques des Cryptomonnaies</h1>
-
+    <h1>Liste des Cryptomonnaies</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Symbole</th>
+                <th>Nom</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for crypto in crypto_data %}
+            <tr>
+                <td>{{ crypto['id'] }}</td>
+                <td>{{ crypto['symbol'] }}</td>
+                <td>{{ crypto['name'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+	
+	<h1>Données des Cryptomonnaies</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Crypto ID</th>
+                <th>Rang</th>
+                <th>Volume</th>
+                <th>Prix</th>
+                <th>Heure de collecte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in cryptoData_data %}
+            <tr>
+                <td>{{ entry['id'] }}</td>
+                <td>{{ entry['crypto_id'] }}</td>
+                <td>{{ entry['rank'] }}</td>
+                <td>{{ entry['volume'] }}</td>
+                <td>{{ entry['price'] }}</td>
+                <td>{{ entry['fetchTime'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+	
 </body>
 </html>
+
