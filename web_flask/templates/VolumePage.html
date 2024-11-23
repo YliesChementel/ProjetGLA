@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Volumes des Cryptomonnaies</title>
+</head>
+<body>
+	{% include 'bandeau.html' %}
+    <h1>Graphiques des Volumes des Cryptomonnaies</h1>
+
+    <div>
+        <h2>Bitcoin (BTC)</h2>
+        {{ graphVolumeBTC | safe }}
+    </div>
+    <div>
+        <h2>Ethereum (ETH)</h2>
+        {{ graphVolumeETH | safe }}
+    </div>
+    <div>
+        <h2>Tether (USDT)</h2>
+        {{ graphVolumeUSDT | safe }}
+    </div>
+    <div>
+        <h2>Solana (SOL)</h2>
+        {{ graphVolumeSOL | safe }}
+    </div>
+    <div>
+        <h2>Binance Coin (BNB)</h2>
+        {{ graphVolumeBNB | safe }}
+    </div>
+</body>
+</html>

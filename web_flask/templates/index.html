@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Marchés de Cryptomonnaies</title>
 </head>
 <body>
+	{% include 'bandeau.html' %}
     <h1>Liste des Cryptomonnaies</h1>
     <table border="1">
         <thead>
@@ -25,30 +27,6 @@
             {% endfor %}
         </tbody>
     </table>
-	<h1>Évolution du Prix des Bitcoin</h1>
-	
-		{{ graphPriceBTC|safe }}
-		
-		{{ graphPriceETH|safe }}
-	
-		{{ graphPriceUDST|safe }}
-		
-		{{ graphPriceSOL|safe }}
-		
-		{{ graphPriceBNB|safe }}
-		
-	
-    <h1>Évolution du Volumes des Bitcoin</h1>
-	
-		{{ graphVolumeBTC|safe }}
-		
-		{{ graphVolumeETH|safe }}
-	
-		{{ graphVolumeUDST|safe }}
-		
-		{{ graphVolumeSOL|safe }}
-		
-		{{ graphVolumeBNB|safe }}
 	
 </body>
 </html>
