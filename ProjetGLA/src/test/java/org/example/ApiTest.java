@@ -18,7 +18,7 @@ public class ApiTest {
 
     // Test the takeApiRequest() method
     @Test
-    public void testTakeApiRequest() {
+    public void shouldReturnApiRequest() {
         String url = "https://api.example.com/data";
         HttpRequest request = Api.takeApiRequest(url);
         assertNotNull(request);
@@ -27,7 +27,7 @@ public class ApiTest {
     }
 
     @Test
-    public void testTakeJsonRequest() throws IOException, InterruptedException {
+    public void shouldReturnJsonRequest() throws IOException, InterruptedException {
         HttpClient mockClient = mock(HttpClient.class);
         HttpRequest mockRequest = mock(HttpRequest.class);
         HttpResponse<String> mockResponse = mock(HttpResponse.class);
@@ -40,9 +40,16 @@ public class ApiTest {
         JSONArray assets = Api.takeJsonRequest(mockRequest, mockClient);
 
         assertNotNull(assets);
-        assertEquals(1, assets.length()); // one asset in the mocked response
+        assertEquals(1, assets.length());
         JSONObject asset = assets.getJSONObject(0);
         assertEquals("BTC", asset.getString("symbol"));
         assertEquals(50000, asset.getDouble("priceUsd"));
     }
+
+    @Test
+    public void shouldReturnTime() {
+        String currentTime = Api.takeTime();
+        assertNotNull(currentTime);
+    }
+
 }
