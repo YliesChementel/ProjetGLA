@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-m2
 
       - name: Change directory to ProjetGla
-        run: cd YliesChementel/ProjetGLA/ProjetGla
+        run: cd YliesChementel/ProjetGLA/ProjetGLA
 
       - name: Build with Maven
         env:
