@@ -18,8 +18,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'corretto'
-      - name: List files
-        run: ls -R
+
       - name: Cache Gradle packages
         uses: actions/cache@v4
         with:
@@ -45,9 +44,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-m2
-
-      - name: Change directory to ProjetGla
-        run: cd YliesChementel/ProjetGLA/ProjetGLA
 
       - name: Build with Maven
         env:
