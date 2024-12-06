@@ -4,43 +4,48 @@ on:
   push:
     branches:
       - appliConsole
-steps:
-  - name: Checkout code
-    uses: actions/checkout@v4
+jobs:
+  Test:
+    name: Test
+    runs-on: ubuntu-latest
 
-  - name: Setup Java
-    uses: actions/setup-java@v4
-    with:
-      java-version: '21'
-      distribution: 'corretto'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  - name: Cache Gradle packages
-    uses: actions/cache@v4
-    with:
-      path: |
-        ~/.gradle/caches
-        ~/.gradle/wrapper
-      key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle*') }}
-      restore-keys: |
-        ${{ runner.os }}-gradle-
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
 
-  - name: Cache SonarQube packages
-    uses: actions/cache@v4
-    with:
-      path: ~/.sonar/cache
-      key: ${{ runner.os }}-sonar
-      restore-keys: |
-        ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-  - name: Cache Maven packages
-    uses: actions/cache@v4
-    with:
-      path: ~/.m2
-      key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-      restore-keys: |
-        ${{ runner.os }}-m2
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: |
+            ${{ runner.os }}-sonar
 
-  - name: Build with Maven
-    env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=$(echo ${{ github.repository }} | sed 's-/-_-')
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2
+
+      - name: Build with Maven
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=$(echo ${{ github.repository }} | sed 's-/-_-')
