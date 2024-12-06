@@ -4,28 +4,43 @@ on:
   push:
     branches:
       - appliConsole
-jobs:
-  sonarqube:
-    name: Run SonarQubeConsole Analysis
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+steps:
+  - name: Checkout code
+    uses: actions/checkout@v4
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v4
-        with:
-          java-version: '11'
-          distribution: 'corretto'
+  - name: Setup Java
+    uses: actions/setup-java@v4
+    with:
+      java-version: '21'
+      distribution: 'corretto'
 
-      - name: Cache SonarQube scanner
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar-${{ hashFiles('**/pom.xml') }}
+  - name: Cache Gradle packages
+    uses: actions/cache@v4
+    with:
+      path: |
+        ~/.gradle/caches
+        ~/.gradle/wrapper
+      key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle*') }}
+      restore-keys: |
+        ${{ runner.os }}-gradle-
 
-      - name: Run SonarQube Scanner
-        uses: sonarsource/sonarcloud-github-action@v2
-        with:
-          sonar-token: ${{ secrets.SONAR_TOKEN }}
-          projectKey: 'ProjetGla'
+  - name: Cache SonarQube packages
+    uses: actions/cache@v4
+    with:
+      path: ~/.sonar/cache
+      key: ${{ runner.os }}-sonar
+      restore-keys: |
+        ${{ runner.os }}-sonar
+
+  - name: Cache Maven packages
+    uses: actions/cache@v4
+    with:
+      path: ~/.m2
+      key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+      restore-keys: |
+        ${{ runner.os }}-m2
+
+  - name: Build with Maven
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=$(echo ${{ github.repository }} | sed 's-/-_-')
