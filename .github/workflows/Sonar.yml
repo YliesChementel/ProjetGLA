@@ -3,7 +3,7 @@ name : SonarQubeConsole
 on:
   push:
     branches:
-      - appliConsole
+      - main
 jobs:
   build:
     name: Build and analyze
