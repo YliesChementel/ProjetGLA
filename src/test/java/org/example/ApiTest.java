@@ -10,6 +10,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -50,6 +52,17 @@ public class ApiTest {
     public void shouldReturnTime() {
         String currentTime = Api.takeTime();
         assertNotNull(currentTime);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        assertArrayEquals(dtf.format(now).toCharArray(), currentTime.toCharArray());
+    }
+
+    @Test
+    public void shouldReturnJsonResponse() throws IOException, InterruptedException {
+        HttpClient mockClient = mock(HttpClient.class);
+        HttpRequest mockRequest = mock(HttpRequest.class);
+        HttpResponse<String> mockResponse = mock(HttpResponse.class);
+
     }
 
 }

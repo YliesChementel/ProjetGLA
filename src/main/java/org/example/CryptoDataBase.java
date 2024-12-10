@@ -33,9 +33,11 @@ public class CryptoDataBase {
                 "price DECIMAL(30,10)," +
                 "fetchTime TIMESTAMP NOT NULL," +
                 "FOREIGN KEY(crypto_id) REFERENCES Crypto(id));";
+        String index = "CREATE INDEX IF NOT EXISTS Index ON CryptoData(crypto_id)";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
+            stmt.execute(index);
             logger.info("Table 'CryptoData' créée !");
         } catch (SQLException e) {
             logger.info(e.getMessage());
