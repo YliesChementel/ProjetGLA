@@ -19,7 +19,7 @@ public class Api {
 
     static Logger logger = Logger.getLogger(Api.class.getName());
 
-    private Api() {
+    Api() {
 
     }
 

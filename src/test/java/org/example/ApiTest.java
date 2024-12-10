@@ -65,4 +65,9 @@ public class ApiTest {
 
     }
 
+    @Test
+    public void shouldReturnInstance(){
+        Api api = new Api();
+        assertNotNull(api);
+    }
 }
