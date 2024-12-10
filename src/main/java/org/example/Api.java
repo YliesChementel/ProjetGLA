@@ -32,7 +32,12 @@ public class Api {
 
     static JSONArray takeJsonRequest(HttpRequest request, HttpClient client) throws IOException, InterruptedException {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        logger.info("Statut de la réponse: " + response.statusCode());
+        if(response.statusCode()==400) {
+            logger.info("Statut Error");
+        }
+        if(response.statusCode()==200) {
+            logger.info("Statut Success");
+        }
         String body = response.body();
 
         JSONObject jsonResponse = new JSONObject(body);
