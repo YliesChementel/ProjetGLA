@@ -86,5 +86,7 @@
   <properties>
     <maven.compiler.target>11</maven.compiler.target>
     <maven.compiler.source>11</maven.compiler.source>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.organization>projetglachementel</sonar.organization>
   </properties>
 </project>

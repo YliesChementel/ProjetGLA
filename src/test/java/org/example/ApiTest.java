@@ -68,13 +68,6 @@ public class ApiTest {
         assertArrayEquals(dtf.format(now).toCharArray(), currentTime.toCharArray());
     }
 
-    @Test
-    public void shouldReturnJsonResponse() throws IOException, InterruptedException {
-        HttpClient mockClient = mock(HttpClient.class);
-        HttpRequest mockRequest = mock(HttpRequest.class);
-        HttpResponse<String> mockResponse = mock(HttpResponse.class);
-
-    }
 
 
     @Test
