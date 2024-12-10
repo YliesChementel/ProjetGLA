@@ -1,8 +1,15 @@
 package org.example;
 
 import java.sql.*;
+import java.util.logging.Logger;
 
 public class CryptoDataBase {
+
+    static Logger logger = Logger.getLogger(CryptoDataBase.class.getName());
+
+    private CryptoDataBase() {
+    }
+
     static void createCrypto(Connection conn) {
         String sql = "CREATE TABLE IF NOT EXISTS Crypto (" +
                 "id TEXT PRIMARY KEY," +
@@ -11,9 +18,9 @@ public class CryptoDataBase {
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table 'Crypto' créée !");
+            logger.info("Table 'Crypto' créée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -29,9 +36,9 @@ public class CryptoDataBase {
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table 'CryptoData' créée !");
+            logger.info("Table 'CryptoData' créée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -39,7 +46,7 @@ public class CryptoDataBase {
         try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null)) {
             return rs.next();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
             return false;
         }
     }
@@ -52,9 +59,9 @@ public class CryptoDataBase {
             pstmt.setString(2, symbol);
             pstmt.setString(3, name);
             pstmt.executeUpdate();
-            System.out.println("Données insérées : " + id + ", " + name + ", " + symbol);
+            logger.info("Données insérées : " + id + ", " + name + ", " + symbol);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -68,9 +75,9 @@ public class CryptoDataBase {
             pstmt.setDouble(4, price);
             pstmt.setString(5, fetchTime);
             pstmt.executeUpdate();
-            System.out.println("Données insérées dans 'CryptoData': " + cryptoId + ", " + rank + ", " + volume + ", " + price + ", " + fetchTime);
+            logger.info("Données insérées dans 'CryptoData': " + cryptoId + ", " + rank + ", " + volume + ", " + price + ", " + fetchTime);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -81,10 +88,10 @@ public class CryptoDataBase {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                System.out.println("ID: " + rs.getString("id") + ", Symbole: " + rs.getString("symbol") + ", Nom: " + rs.getString("name"));
+                logger.info("ID: " + rs.getString("id") + ", Symbole: " + rs.getString("symbol") + ", Nom: " + rs.getString("name"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -95,10 +102,10 @@ public class CryptoDataBase {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                System.out.println("ID: " + rs.getString("id") + ", CryptoId: " + rs.getString("crypto_id") + ", Rank: " + rs.getString("rank") + ", Volume: " + rs.getString("volume") + ", Price: " + rs.getString("price") + ", FetchTime: " + rs.getString("fetchTime"));
+                logger.info("ID: " + rs.getString("id") + ", CryptoId: " + rs.getString("crypto_id") + ", Rank: " + rs.getString("rank") + ", Volume: " + rs.getString("volume") + ", Price: " + rs.getString("price") + ", FetchTime: " + rs.getString("fetchTime"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
