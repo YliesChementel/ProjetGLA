@@ -1,0 +1,75 @@
+package org.example;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static org.example.CryptoDataBase.*;
+
+public class Api {
+
+
+    static HttpRequest takeApiRequest(String requestApi) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(requestApi))
+                .header("Accept", "application/json")
+                .build();
+        return request;
+    }
+
+    static JSONArray takeJsonRequest(HttpRequest request, HttpClient client) throws IOException, InterruptedException {
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Statut de la réponse: " + response.statusCode());
+        String body = response.body();
+
+        JSONObject jsonResponse = new JSONObject(body);
+        JSONArray assets = jsonResponse.getJSONArray("data");
+        return assets;
+    }
+
+    static String takeTime() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        String fetchTime = dtf.format(now);
+        return fetchTime;
+    }
+
+    static void apiRun(String cryptoDB, HttpClient client, HttpRequest request) throws IOException, InterruptedException {
+        while (true) {
+            try (Connection conn = DriverManager.getConnection(cryptoDB)) {
+
+                String fetchTime = takeTime();
+                JSONArray assets = takeJsonRequest(request,client);
+
+                for (int i = 0; i < 5; i++) {
+                    JSONObject asset = assets.getJSONObject(i);
+                    Crypto crypto = new Crypto(asset.getString("id"),
+                            asset.getString("symbol"),
+                            asset.getString("name"),
+                            Integer.parseInt(asset.getString("rank")),
+                            asset.optDouble("volumeUsd24Hr", 0.0),
+                            asset.optDouble("priceUsd", 0.0));
+
+                    insertIntoCrypto(conn, crypto.getId(), crypto.getSymbol(), crypto.getName());
+                    insertIntoCryptoData(conn, crypto.getId(), crypto.getRank(), crypto.getVolume(), crypto.getPrice(), fetchTime);
+                }
+
+                displayCrypto(conn);
+                displayCryptoData(conn);
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            Thread.sleep(1000);  // 1 seconde
+        }
+    }
+}
