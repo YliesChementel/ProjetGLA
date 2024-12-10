@@ -11,35 +11,38 @@ import java.net.http.HttpResponse;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Logger;
 
 import static org.example.CryptoDataBase.*;
 
 public class Api {
 
+    static Logger logger = Logger.getLogger(Api.class.getName());
+
+    private Api() {
+
+    }
 
     static HttpRequest takeApiRequest(String requestApi) {
-        HttpRequest request = HttpRequest.newBuilder()
+        return  HttpRequest.newBuilder()
                 .uri(URI.create(requestApi))
                 .header("Accept", "application/json")
                 .build();
-        return request;
     }
 
     static JSONArray takeJsonRequest(HttpRequest request, HttpClient client) throws IOException, InterruptedException {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Statut de la réponse: " + response.statusCode());
+        logger.info("Statut de la réponse: " + response.statusCode());
         String body = response.body();
 
         JSONObject jsonResponse = new JSONObject(body);
-        JSONArray assets = jsonResponse.getJSONArray("data");
-        return assets;
+        return jsonResponse.getJSONArray("data");
     }
 
     static String takeTime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        String fetchTime = dtf.format(now);
-        return fetchTime;
+        return dtf.format(now);
     }
 
     static void apiRun(String cryptoDB, HttpClient client, HttpRequest request) throws IOException, InterruptedException {
@@ -66,7 +69,7 @@ public class Api {
                 displayCryptoData(conn);
 
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                logger.info(e.getMessage());
             }
 
             Thread.sleep(1000);  // 1 seconde
