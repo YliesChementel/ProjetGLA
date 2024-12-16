@@ -72,8 +72,6 @@ public class ApiTest {
 
     @Test
     public void testTakeTime() {
-        Api api = new Api(null);
-
         String result = api.takeTime();
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
