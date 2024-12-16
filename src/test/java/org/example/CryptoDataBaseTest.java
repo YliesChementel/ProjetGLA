@@ -6,10 +6,6 @@ import org.junit.jupiter.api.Test;
 public class CryptoDataBaseTest {
 
     CryptoDataBase cryptoDataBase;
-
-    @BeforeEach
-    public void setup() {
-
-    }
+    
 
 }
