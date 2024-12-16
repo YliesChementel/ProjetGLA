@@ -14,20 +14,25 @@ public class Main {
     public static void main(String[] args) throws SQLException, IOException, InterruptedException {
         Logger logger = Logger.getLogger(Api.class.getName());
         Api api = new Api(logger);
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = api.takeApiRequest("https://api.coincap.io/v2/assets");
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = api.takeApiRequest("https://api.coincap.io/v2/assets");
 
-        //Vérification de si les tables existe
-        String cryptoDB = "jdbc:sqlite:Crypto.db";
-        try (Connection conn = DriverManager.getConnection(cryptoDB)) {
-            if (!tableExists(conn, "Crypto")) {
-                createCrypto(conn);
+            //Vérification de si les tables existe
+            String cryptoDB = "jdbc:sqlite:Crypto.db";
+            try (Connection conn = DriverManager.getConnection(cryptoDB)) {
+                if (!tableExists(conn, "Crypto")) {
+                    createCrypto(conn);
+                }
+                if (!tableExists(conn, "CryptoData")) {
+                    createCryptoData(conn);
+                }
             }
-            if (!tableExists(conn, "CryptoData")) {
-                createCryptoData(conn);
-            }
+
+            api.apiRun(cryptoDB, client, request);
         }
-
-        api.apiRun(cryptoDB, client, request);
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
