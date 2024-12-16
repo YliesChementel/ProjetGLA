@@ -61,7 +61,6 @@ public class CryptoDataBase {
             pstmt.setString(2, symbol);
             pstmt.setString(3, name);
             pstmt.executeUpdate();
-            //logger.info("Données insérées : %s, %s, %s", id,name,symbol);
         } catch (SQLException e) {
             logger.info(e.getMessage());
         }
