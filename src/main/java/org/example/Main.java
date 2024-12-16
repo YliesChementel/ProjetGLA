@@ -14,8 +14,8 @@ public class Main {
     public static void main(String[] args) throws SQLException, IOException, InterruptedException {
         Logger logger = Logger.getLogger(Api.class.getName());
         Api api = new Api(logger);
+        HttpClient client = HttpClient.newHttpClient();
         try {
-            HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = api.takeApiRequest("https://api.coincap.io/v2/assets");
 
             //Vérification de si les tables existe
@@ -31,8 +31,11 @@ public class Main {
 
             api.apiRun(cryptoDB, client, request);
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch(IOException | SQLException e) {
+            logger.severe("Une erreur s'est produite "+e.getMessage());
+        }
+        finally {
+
         }
     }
 }
