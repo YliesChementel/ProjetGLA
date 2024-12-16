@@ -15,27 +15,19 @@ public class Main {
         Logger logger = Logger.getLogger(Api.class.getName());
         Api api = new Api(logger);
         HttpClient client = HttpClient.newHttpClient();
-        try {
-            HttpRequest request = api.takeApiRequest("https://api.coincap.io/v2/assets");
+        HttpRequest request = api.takeApiRequest("https://api.coincap.io/v2/assets");
 
-            //Vérification de si les tables existe
-            String cryptoDB = "jdbc:sqlite:Crypto.db";
-            try (Connection conn = DriverManager.getConnection(cryptoDB)) {
-                if (!tableExists(conn, "Crypto")) {
-                    createCrypto(conn);
-                }
-                if (!tableExists(conn, "CryptoData")) {
-                    createCryptoData(conn);
-                }
+        //Vérification de si les tables existe
+        String cryptoDB = "jdbc:sqlite:Crypto.db";
+        try (Connection conn = DriverManager.getConnection(cryptoDB)) {
+            if (!tableExists(conn, "Crypto")) {
+                createCrypto(conn);
             }
+            if (!tableExists(conn, "CryptoData")) {
+                createCryptoData(conn);
+            }
+        }
 
-            api.apiRun(cryptoDB, client, request);
-        }
-        catch(IOException | SQLException e) {
-            logger.severe("Une erreur s'est produite "+e.getMessage());
-        }
-        finally {
-
-        }
+        api.apiRun(cryptoDB, client, request);
     }
 }
