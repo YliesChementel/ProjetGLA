@@ -22,6 +22,12 @@ public class CryptoTest {
     }
 
     @Test
+    void shouldSetIDofBitcoin() throws Exception {
+        crypto.setId("1");
+        assertEquals(crypto.getId(), "1");
+    }
+
+    @Test
     void shouldReturnSymbolfBitcoin() throws Exception {
         assertEquals(crypto.getSymbol(), "BTC");
     }
