@@ -27,7 +27,19 @@ public class CryptoTest {
     }
 
     @Test
+    void shouldSetSymbolfBitcoin() throws Exception {
+        crypto.setSymbol("BTC");
+        assertEquals(crypto.getSymbol(), "BTC");
+    }
+
+    @Test
     void shouldReturnNameofBitcoin() throws Exception {
+        assertEquals(crypto.getName(), "bitcoin");
+    }
+
+    @Test
+    void shouldSetNameofBitcoin() throws Exception {
+        crypto.setName("bitcoin");
         assertEquals(crypto.getName(), "bitcoin");
     }
 
@@ -37,12 +49,30 @@ public class CryptoTest {
     }
 
     @Test
+    void shouldSetRankofBitcoin() throws Exception {
+        crypto.setRank(1);
+        assertEquals(crypto.getRank(), 1);
+    }
+
+    @Test
     void shouldReturnVolumeofBitcoin() throws Exception {
         assertEquals(crypto.getVolume(), 35539793269.721);
     }
 
     @Test
+    void shouldSetVolumeofBitcoin() throws Exception {
+        crypto.setVolume(35539793269.721);
+        assertEquals(crypto.getVolume(), 35539793269.721);
+    }
+
+    @Test
     void shouldReturnPriceofBitcoin() throws Exception {
+        assertEquals(crypto.getPrice(), 98397.5942776494);
+    }
+
+    @Test
+    void shouldSetPriceofBitcoin() throws Exception {
+        crypto.setPrice(98397.5942776494);
         assertEquals(crypto.getPrice(), 98397.5942776494);
     }
 
