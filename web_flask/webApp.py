@@ -6,15 +6,35 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    connCrypto = sqlite3.connect('Crypto.db')  
-    
+    # Connexion à la base de données Crypto.db
+    connCrypto = sqlite3.connect('Crypto.db')
     connCrypto.row_factory = sqlite3.Row
-    
+
+    # Récupération des données de la base
     crypto_data = connCrypto.execute('SELECT * FROM Crypto').fetchall()
     cryptoData_data = connCrypto.execute('SELECT * FROM CryptoData').fetchall()
- 
+
     connCrypto.close()
-    
+
+    return render_template(
+        'index.html',
+        crypto_data=crypto_data,
+        cryptoData_data=cryptoData_data
+    )
+
+@app.route('/PricePage')
+def PricePage():
+    # Connexion à la base de données Crypto.db
+    connCrypto = sqlite3.connect('Crypto.db')
+    connCrypto.row_factory = sqlite3.Row
+
+    # Récupération des données de la base
+    crypto_data = connCrypto.execute('SELECT * FROM Crypto').fetchall()
+    cryptoData_data = connCrypto.execute('SELECT * FROM CryptoData').fetchall()
+
+    connCrypto.close()
+
+    # Génération des graphiques des prix
     prices, volumes = graphPricesAndVolumes(cryptoData_data)
 
     graphPriceBTC = prices[0].to_html(full_html=False)
@@ -23,21 +43,36 @@ def index():
     graphPriceSOL = prices[3].to_html(full_html=False)
     graphPriceBNB = prices[4].to_html(full_html=False)
 
+    return render_template('PricePage.html',
+        graphPriceBTC=graphPriceBTC,
+        graphPriceETH=graphPriceETH,
+        graphPriceUDST=graphPriceUDST,
+        graphPriceSOL=graphPriceSOL,
+        graphPriceBNB=graphPriceBNB
+    )
+
+@app.route('/VolumePage')
+def VolumePage():  # Renommé pour éviter le conflit de nom
+    # Connexion à la base de données Crypto.db
+    connCrypto = sqlite3.connect('Crypto.db')
+    connCrypto.row_factory = sqlite3.Row
+
+    # Récupération des données de la base
+    crypto_data = connCrypto.execute('SELECT * FROM Crypto').fetchall()
+    cryptoData_data = connCrypto.execute('SELECT * FROM CryptoData').fetchall()
+
+    connCrypto.close()
+
+    # Génération des graphiques des volumes
+    prices, volumes = graphPricesAndVolumes(cryptoData_data)
+
     graphVolumeBTC = volumes[0].to_html(full_html=False)
     graphVolumeETH = volumes[1].to_html(full_html=False)
     graphVolumeUDST = volumes[2].to_html(full_html=False)
     graphVolumeSOL = volumes[3].to_html(full_html=False)
     graphVolumeBNB = volumes[4].to_html(full_html=False)
-    
-    return render_template(
-        'index.html',
-        crypto_data=crypto_data,
-        cryptoData_data=cryptoData_data,
-        graphPriceBTC=graphPriceBTC,
-        graphPriceETH=graphPriceETH,
-        graphPriceUDST=graphPriceUDST,
-        graphPriceSOL=graphPriceSOL,
-        graphPriceBNB=graphPriceBNB,
+
+    return render_template('VolumePage.html',
         graphVolumeBTC=graphVolumeBTC,
         graphVolumeETH=graphVolumeETH,
         graphVolumeUDST=graphVolumeUDST,
@@ -67,7 +102,7 @@ def graphPricesAndVolumes(cryptoData_data):
         if data['crypto_id'] == "binance-coin":
             pricesBNB.append(data['price'])
             volumesBNB.append(data['volume'])
-    
+
     # Création des graphiques pour les prix
     figBTC = go.Figure()
     figETH = go.Figure()
