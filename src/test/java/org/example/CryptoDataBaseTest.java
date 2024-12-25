@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CryptoDataBaseTest {
 
-    private static final String DB_URL = "jdbc:sqlite:CryptoTest.db";  // Base de données en mémoire H2
+    private static final String DB_URL = "jdbc:sqlite:CryptoTest.db";
     private static Connection conn;
 
     @BeforeEach
