@@ -17,69 +17,69 @@ public class CryptoTest {
     }
 
     @Test
-    void shouldReturnIDofBitcoin() throws Exception {
-        assertEquals(crypto.getId(), "1");
+    void shouldReturnIDofBitcoin(){
+        assertEquals("1",crypto.getId());
     }
 
     @Test
-    void shouldSetIDofBitcoin() throws Exception {
+    void shouldSetIDofBitcoin() {
         crypto.setId("1");
-        assertEquals(crypto.getId(), "1");
+        assertEquals("1",crypto.getId());
     }
 
     @Test
-    void shouldReturnSymbolfBitcoin() throws Exception {
-        assertEquals(crypto.getSymbol(), "BTC");
+    void shouldReturnSymbolfBitcoin() {
+        assertEquals("BTC",crypto.getSymbol());
     }
 
     @Test
-    void shouldSetSymbolfBitcoin() throws Exception {
+    void shouldSetSymbolfBitcoin() {
         crypto.setSymbol("BTC");
-        assertEquals(crypto.getSymbol(), "BTC");
+        assertEquals("BTC",crypto.getSymbol());
     }
 
     @Test
-    void shouldReturnNameofBitcoin() throws Exception {
-        assertEquals(crypto.getName(), "bitcoin");
+    void shouldReturnNameofBitcoin() {
+        assertEquals("bitcoin",crypto.getName());
     }
 
     @Test
-    void shouldSetNameofBitcoin() throws Exception {
+    void shouldSetNameofBitcoin() {
         crypto.setName("bitcoin");
-        assertEquals(crypto.getName(), "bitcoin");
+        assertEquals("bitcoin",crypto.getName());
     }
 
     @Test
-    void shouldReturnRankofBitcoin() throws Exception {
-        assertEquals(crypto.getRank(), 1);
+    void shouldReturnRankofBitcoin() {
+        assertEquals(1,crypto.getRank());
     }
 
     @Test
-    void shouldSetRankofBitcoin() throws Exception {
+    void shouldSetRankofBitcoin() {
         crypto.setRank(1);
-        assertEquals(crypto.getRank(), 1);
+        assertEquals(1,crypto.getRank());
     }
 
     @Test
-    void shouldReturnVolumeofBitcoin() throws Exception {
-        assertEquals(crypto.getVolume(), 35539793269.721);
+    void shouldReturnVolumeofBitcoin() {
+        assertEquals(35539793269.721,crypto.getVolume());
     }
 
     @Test
-    void shouldSetVolumeofBitcoin() throws Exception {
+    void shouldSetVolumeofBitcoin() {
         crypto.setVolume(35539793269.721);
-        assertEquals(crypto.getVolume(), 35539793269.721);
+        assertEquals(35539793269.721,crypto.getVolume());
     }
 
     @Test
-    void shouldReturnPriceofBitcoin() throws Exception {
-        assertEquals(crypto.getPrice(), 98397.5942776494);
+    void shouldReturnPriceofBitcoin() {
+        assertEquals(98397.5942776494,crypto.getPrice());
     }
 
     @Test
-    void shouldSetPriceofBitcoin() throws Exception {
+    void shouldSetPriceofBitcoin() {
         crypto.setPrice(98397.5942776494);
-        assertEquals(crypto.getPrice(), 98397.5942776494);
+        assertEquals(98397.5942776494,crypto.getPrice());
     }
 
 }

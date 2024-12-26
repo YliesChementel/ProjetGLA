@@ -24,7 +24,7 @@ public class CryptoDataBase {
         }
     }
 
-    static void createCryptoData(Connection conn) {
+    static void createCryptoData(Connection conn) throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS CryptoData (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "crypto_id TEXT NOT NULL," +
@@ -33,11 +33,9 @@ public class CryptoDataBase {
                 "price DECIMAL(30,10)," +
                 "fetchTime TIMESTAMP NOT NULL," +
                 "FOREIGN KEY(crypto_id) REFERENCES Crypto(id));";
-        //String index = "CREATE INDEX IF NOT EXISTS Index ON CryptoData(crypto_id)";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            //stmt.execute(index);
             logger.info("Table 'CryptoData' créée !");
         } catch (SQLException e) {
             logger.info(e.getMessage());
@@ -47,7 +45,7 @@ public class CryptoDataBase {
     static boolean tableExists(Connection conn, String tableName) {
         try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null)) {
             return rs.next();
-        } catch (SQLException e) {
+        } catch (NullPointerException | SQLException e) {
             logger.info(e.getMessage());
             return false;
         }

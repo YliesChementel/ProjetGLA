@@ -12,7 +12,9 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <sonar.organization>projetglachementel</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.projectKey>sqp_9b6a9a29ff1cacd136ca4f295ad0d39f7b05cbf8</sonar.projectKey>
+        <sonar.login>${env.SONAR_LOGIN}</sonar.login>
     </properties>
 
     <build>

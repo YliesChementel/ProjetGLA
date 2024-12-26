@@ -4,34 +4,34 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 
+import static org.example.CryptoDataBase.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ApiTest {
+class ApiTest {
 
     Api api;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         Logger logger = Logger.getLogger(Api.class.getName());
         api = new Api(logger);
     }
 
     @Test
-    public void shouldReturnApiRequest() {
+    void shouldReturnApiRequest() {
         String url = "https://api.example.com/data";
         HttpRequest request = api.takeApiRequest(url);
         assertNotNull(request);
@@ -40,7 +40,7 @@ public class ApiTest {
     }
 
     @Test
-    public void shouldReturnJsonRequest() throws IOException, InterruptedException {
+    void shouldReturnJsonRequest() throws IOException, InterruptedException {
         HttpClient mockClient = mock(HttpClient.class);
         HttpRequest mockRequest = mock(HttpRequest.class);
         HttpResponse<String> mockResponse = mock(HttpResponse.class);
@@ -60,7 +60,55 @@ public class ApiTest {
     }
 
     @Test
-    public void shouldReturnTime() {
+    void shouldReturnNullWhenStatus400() throws IOException, InterruptedException {
+        HttpClient mockClient = mock(HttpClient.class);
+        HttpRequest mockRequest = mock(HttpRequest.class);
+        HttpResponse<String> mockResponse = mock(HttpResponse.class);
+
+        String jsonResponse = "{}";
+        when(mockResponse.body()).thenReturn(jsonResponse);
+        when(mockResponse.statusCode()).thenReturn(400);
+        when(mockClient.send(mockRequest, HttpResponse.BodyHandlers.ofString())).thenReturn(mockResponse);
+
+        JSONArray assets = api.takeJsonRequest(mockRequest, mockClient);
+
+        assertNull(assets);
+    }
+
+    @Test
+    void shouldReturnNullWhenStatus500() throws IOException, InterruptedException {
+        HttpClient mockClient = mock(HttpClient.class);
+        HttpRequest mockRequest = mock(HttpRequest.class);
+        HttpResponse<String> mockResponse = mock(HttpResponse.class);
+
+        String jsonResponse = "{}";
+        when(mockResponse.body()).thenReturn(jsonResponse);
+        when(mockResponse.statusCode()).thenReturn(500);
+        when(mockClient.send(mockRequest, HttpResponse.BodyHandlers.ofString())).thenReturn(mockResponse);
+
+        JSONArray assets = api.takeJsonRequest(mockRequest, mockClient);
+
+        assertNull(assets);
+    }
+
+    @Test
+    void shouldReturnNullWhenStatusIsOther() throws IOException, InterruptedException {
+        HttpClient mockClient = mock(HttpClient.class);
+        HttpRequest mockRequest = mock(HttpRequest.class);
+        HttpResponse<String> mockResponse = mock(HttpResponse.class);
+
+        String jsonResponse = "{}";
+        when(mockResponse.body()).thenReturn(jsonResponse);
+        when(mockResponse.statusCode()).thenReturn(250);
+        when(mockClient.send(mockRequest, HttpResponse.BodyHandlers.ofString())).thenReturn(mockResponse);
+
+        JSONArray assets = api.takeJsonRequest(mockRequest, mockClient);
+
+        assertNull(assets);
+    }
+
+    @Test
+    void shouldReturnTime() {
         String currentTime = api.takeTime();
         assertNotNull(currentTime);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -68,18 +116,73 @@ public class ApiTest {
         assertArrayEquals(dtf.format(now).toCharArray(), currentTime.toCharArray());
     }
 
+    @Test
+    void shouldBreakWhenAssetNull() throws Exception {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+        HttpClient mockClient = mock(HttpClient.class);
+        HttpRequest mockRequest = mock(HttpRequest.class);
+        HttpResponse<String> mockResponse = mock(HttpResponse.class);
 
+        String jsonResponse = "{}";
+        when(mockResponse.body()).thenReturn(jsonResponse);
+        when(mockResponse.statusCode()).thenReturn(400);
+        when(mockClient.send(mockRequest, HttpResponse.BodyHandlers.ofString())).thenReturn(mockResponse);
+
+        // Créer un spy sur l'instance api pour vérifier l'exécution
+        Api apiSpy = spy(api);
+
+        apiSpy.apiRun(conn, mockClient, mockRequest,1);
+
+        // Vérifier que la boucle while s'est terminée sans exécuter la suite du code
+        verify(apiSpy, times(1)).takeJsonRequest(any(HttpRequest.class), any(HttpClient.class));  // Vérifier que takeJsonRequest a bien été appelé une fois
+    }
 
     @Test
-    public void testTakeTime() {
-        String result = api.takeTime();
+    void shouldInteractWithDatabase() throws Exception {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite::memory:"); // In-memory database
+        createCrypto(conn);
+        createCryptoData(conn);
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        String expectedFormat = LocalDateTime.now().format(dtf);
+        HttpClient mockClient = mock(HttpClient.class);
+        HttpRequest mockRequest = mock(HttpRequest.class);
+        HttpResponse<String> mockResponse = mock(HttpResponse.class);
 
-        assertTrue(result.matches("\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}"));
+        String jsonResponse = "{ \"data\": [ { \"id\": \"1\", \"rank\": \"1\", \"symbol\": \"BTC\", \"name\": \"Bitcoin\", \"volumeUsd24Hr\": 1000, \"priceUsd\": 50000 } ] }";
+        when(mockResponse.body()).thenReturn(jsonResponse);
+        when(mockResponse.statusCode()).thenReturn(200);
+        when(mockClient.send(mockRequest, HttpResponse.BodyHandlers.ofString())).thenReturn(mockResponse);
 
-        assertEquals(expectedFormat.substring(0, 10), result.substring(0, 10));
-        assertEquals(expectedFormat.substring(11, 19), result.substring(11, 19));
+        // Exécution de apiRun avec un timeout de 1 seconde
+        ExecutorService executor = java.util.concurrent.Executors.newSingleThreadExecutor();
+        Callable<Void> task = () -> {
+            api.apiRun(conn, mockClient, mockRequest, 1);  // Appel à la méthode apiRun
+            return null;  // Retourne null, car l'API n'a pas de valeur de retour
+        };
+
+        Future<Void> future = executor.submit(task);
+        try {
+            future.get(1, TimeUnit.SECONDS);  // Attente de la tâche pendant 1 seconde
+        } catch (java.util.concurrent.TimeoutException e) {
+            // Si la tâche dépasse 1 seconde, elle sera annulée
+            future.cancel(true);  // Annule la tâche si elle prend trop de temps
+            System.out.println("Timeout reached, task was cancelled.");
+        } catch (ExecutionException | InterruptedException e) {
+            // Gestion des exceptions de l'exécution de la tâche
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();  // Assurez-vous de fermer l'exécuteur
+        }
+
+
+        // Vérification de l'insertion dans la base de données
+        Statement selectStatement = conn.createStatement();
+        ResultSet resultSet = selectStatement.executeQuery("SELECT * FROM CryptoData WHERE id = '1'");
+
+        // Vérification des données insérées
+        assertTrue(resultSet.next());
+        assertEquals(1, resultSet.getInt("Rank"));
+        assertEquals(50000, resultSet.getDouble("Price"));
+        assertEquals(1000, resultSet.getDouble("Volume"));
     }
+
 }

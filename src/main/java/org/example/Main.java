@@ -26,8 +26,7 @@ public class Main {
             if (!tableExists(conn, "CryptoData")) {
                 createCryptoData(conn);
             }
+            api.apiRun(conn, client, request,5);
         }
-
-        api.apiRun(cryptoDB, client, request);
     }
 }
