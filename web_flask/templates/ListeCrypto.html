@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="titrePage">Liste des Cryptomonnaies</h1>
+<table  class="tableau">
+    <thead>
+        <tr>
+            <th>Rang</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Volume</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in cryptoTable: %}
+        <tr>
+            <td>{{ row['rank'] }}</td>
+            <td>{{ row['symbol'] }}<br>{{ row['name'] }}</td>
+            <td>{{ row['price'] }}</td>
+            <td>{{ row['volume'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

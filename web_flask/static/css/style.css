@@ -1,0 +1,125 @@
+/* Définir la police personnalisée avec @font-face */
+@font-face {
+    font-family: 'PoliceSon';
+    src: url('../fonts/SonicLogoBold-MVl6x.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+/* Appliquer la police personnalisée à l'ensemble du body */
+body {
+    font-family: 'PoliceSon'; /* Si 'PoliceSon' ne charge pas, on utilise 'sans-serif' comme police de secours */
+    background-image: url('../images/sonic-media-bg.jpg');
+    color: white;
+}
+
+/* Autres styles CSS */
+h1 {
+    font-family: 'PoliceSon';
+}
+p {
+    font-family: 'PoliceSon';
+    color: #1e2a47
+}
+ 
+.bandeau {
+    font-family: 'PoliceSon';
+    background: #142038; /* Couleur de fond du bandeau (tu peux la modifier selon ton design) */
+    color: white; /* Couleur du texte */
+    padding: 15px 0; /* Espacement interne */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Ombre du bandeau */
+}
+
+.bandeau h1{
+    font-family: 'PoliceSon';
+}
+
+
+.question {
+    font-family: 'PoliceSon';
+    text-align: center;
+}
+
+.services {
+    font-family: 'PoliceSon';
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+.service-card {
+    font-family: 'PoliceSon';
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    width: 30%;
+    text-align: center;
+    color: #1e2a47;
+    border: 5px solid #FFFF55;
+}
+.service-card h3 {
+    font-family: 'PoliceSon';
+    color: #1e2b48;
+}
+
+
+
+
+.titrePage {
+    font-family: 'PoliceSon';
+    text-align: center;
+    color: #ffffff;  /* Couleur du texte */
+    text-shadow: 
+        2px 2px 0 #000,    /* Ombre droite et en bas */
+        -2px -2px 0 #000,   /* Ombre gauche et en haut */
+        2px -2px 0 #000,    /* Ombre droite et en haut */
+        -2px 2px 0 #000;    /* Ombre gauche et en bas */
+}
+
+
+
+
+.tableau{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50px;
+    border: 3px solid #FFFF55;
+}
+
+
+
+
+
+footer {
+    margin-top: 50px;
+    background: #1e2a47;
+    color: #fff;
+    padding: 9px 0;
+    text-align: center;
+}
+footer a {
+    color: #fff;
+    text-decoration: none;
+    
+}
+
+/* Appliquer Flexbox à l'ensemble de la page */
+html, body {
+    height: 100%;  /* Important : faire en sorte que le body et html prennent toute la hauteur de la page */
+    margin: 0;     /* Supprimer les marges par défaut */
+}
+
+/* Conteneur principal */
+.container {
+    display: flex;
+    flex-direction: column;  /* Disposer les éléments en colonne */
+    min-height: 100%;        /* S'assurer que le conteneur prend toute la hauteur disponible */
+}
+
+/* Contenu principal (l'espace qui se développe) */
+.main-content {
+    flex-grow: 1;  /* Cette propriété permet de faire grandir le contenu pour occuper tout l'espace restant */
+}

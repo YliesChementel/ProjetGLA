@@ -1,34 +1,27 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Prix des Cryptomonnaies</title>
-</head>
-<body>
-	{% include 'bandeau.html' %}
-    <h1>Graphiques des Prix des Cryptomonnaies</h1>
+{% extends "base.html" %}
 
-    <div>
-        <h2>Bitcoin (BTC)</h2>
-        {{ graphPriceBTC | safe }}
-    </div>
-    <div>
-        <h2>Ethereum (ETH)</h2>
-        {{ graphPriceETH | safe }}
-    </div>
-    <div>
-        <h2>Tether (USDT)</h2>
-        {{ graphPriceUSDT | safe }}
-    </div>
-    <div>
-        <h2>Solana (SOL)</h2>
-        {{ graphPriceSOL | safe }}
-    </div>
-    <div>
-        <h2>Binance Coin (BNB)</h2>
-        {{ graphPriceBNB | safe }}
-    </div>
-</body>
-</html>
+{% block content %}
+<h1 class="titrePage">Graphiques des Prix des Cryptomonnaies</h1>
+
+<div>
+    <h2>Bitcoin (BTC)</h2>
+    {{ graphPriceBTC | safe }}
+</div>
+<div>
+    <h2>Ethereum (ETH)</h2>
+    {{ graphPriceETH | safe }}
+</div>
+<div>
+    <h2>Tether (USDT)</h2>
+    {{ graphPriceUSDT | safe }}
+</div>
+<div>
+    <h2>Solana (SOL)</h2>
+    {{ graphPriceSOL | safe }}
+</div>
+<div>
+    <h2>Binance Coin (BNB)</h2>
+    {{ graphPriceBNB | safe }}
+</div>
+
+{% endblock %}

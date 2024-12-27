@@ -1,38 +1,29 @@
 from flask import Flask, render_template
 import sqlite3
 import plotly.graph_objects as go
+from DbConnexion import get_crypto, get_crypto_data,get_last_data
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # Connexion à la base de données Crypto.db
-    connCrypto = sqlite3.connect('Crypto.db')
-    connCrypto.row_factory = sqlite3.Row
+    return render_template('index.html')
 
-    # Récupération des données de la base
-    crypto_data = connCrypto.execute('SELECT * FROM Crypto').fetchall()
-    cryptoData_data = connCrypto.execute('SELECT * FROM CryptoData').fetchall()
+@app.route('/acceuil')
+def acceuil():
+    return render_template('acceuil.html')  # Accès à la page d'accueil spécifique
 
-    connCrypto.close()
 
-    return render_template(
-        'index.html',
-        crypto_data=crypto_data,
-        cryptoData_data=cryptoData_data
-    )
+@app.route('/ListeCrypto')
+def ListeCrypto():
+    table=get_last_data()
+    return render_template('ListeCrypto.html', cryptoTable=table)
+
+
 
 @app.route('/PricePage')
 def PricePage():
-    # Connexion à la base de données Crypto.db
-    connCrypto = sqlite3.connect('Crypto.db')
-    connCrypto.row_factory = sqlite3.Row
-
-    # Récupération des données de la base
-    crypto_data = connCrypto.execute('SELECT * FROM Crypto').fetchall()
-    cryptoData_data = connCrypto.execute('SELECT * FROM CryptoData').fetchall()
-
-    connCrypto.close()
+    cryptoData_data=get_crypto_data()
 
     # Génération des graphiques des prix
     prices, volumes = graphPricesAndVolumes(cryptoData_data)
@@ -53,15 +44,7 @@ def PricePage():
 
 @app.route('/VolumePage')
 def VolumePage():  # Renommé pour éviter le conflit de nom
-    # Connexion à la base de données Crypto.db
-    connCrypto = sqlite3.connect('Crypto.db')
-    connCrypto.row_factory = sqlite3.Row
-
-    # Récupération des données de la base
-    crypto_data = connCrypto.execute('SELECT * FROM Crypto').fetchall()
-    cryptoData_data = connCrypto.execute('SELECT * FROM CryptoData').fetchall()
-
-    connCrypto.close()
+    cryptoData_data=get_crypto_data()
 
     # Génération des graphiques des volumes
     prices, volumes = graphPricesAndVolumes(cryptoData_data)
@@ -116,11 +99,24 @@ def graphPricesAndVolumes(cryptoData_data):
     figSOL.add_trace(go.Scatter(x=dates, y=pricesSOL, name='Prix Solana'))
     figBNB.add_trace(go.Scatter(x=dates, y=pricesBNB, name='Prix BNB'))
 
-    figBTC.update_layout(title='Évolution du Prix du BTC', xaxis_title='Date', yaxis_title='Prix (USD)')
-    figETH.update_layout(title='Évolution du Prix du ETH', xaxis_title='Date', yaxis_title='Prix (USD)')
-    figUDST.update_layout(title='Évolution du Prix du UDST', xaxis_title='Date', yaxis_title='Prix (USD)')
-    figSOL.update_layout(title='Évolution du Prix du SOL', xaxis_title='Date', yaxis_title='Prix (USD)')
-    figBNB.update_layout(title='Évolution du Prix du BNB', xaxis_title='Date', yaxis_title='Prix (USD)')
+    common_layout = {
+        'xaxis': {'title': 'Date'},
+        'yaxis': {'title': 'Prix (USD)'},
+        'hovermode': 'closest',  # Affichage des valeurs au survol
+        'showlegend': True,  # Montrer la légende
+        'plot_bgcolor': 'rgba(255, 255, 255, 0)',  # Fond transparent
+        'paper_bgcolor': 'rgba(255, 255, 255, 0)',  # Fond du graphique transparent
+        'font': {'family': 'Arial', 'size': 12, 'color': 'black'},
+        'modebar': {'remove': ['zoom', 'pan', 'resetScale', 'zoomIn', 'zoomOut', 'sendDataToCloud']},  # Désactive certaines options du modebar
+    }
+
+    
+    figBTC.update_layout(title='Évolution du Prix du BTC', **common_layout)
+    figETH.update_layout(title='Évolution du Prix de l\'ETH', **common_layout)
+    figUDST.update_layout(title='Évolution du Prix du UDST', **common_layout)
+    figSOL.update_layout(title='Évolution du Prix du SOL', **common_layout)
+    figBNB.update_layout(title='Évolution du Prix du BNB', **common_layout)
+    
 
     # Création des graphiques pour les volumes
     volBTC = go.Figure()
