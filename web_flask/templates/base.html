@@ -8,16 +8,19 @@
     <title>CryptoFrontiers</title>
 </head>
 <body>
-
-    {% include 'bandeau.html' %}
-    
-    <!-- Section dynamique qui sera remplie par chaque page -->
-    {% block content %}
-    {% endblock %}
-    
-    
+    <div class="page-wrapper"> 
+        <header>
+            {% include 'bandeau.html' %}
+        </header>
+        <main>
+            <!-- Section dynamique qui sera remplie par chaque page -->
+            {% block content %}
+            {% endblock %}
+        </main>
+        <footer>
+            {% include 'footer.html' %}
+        </footer> 
+    </div>   
 </body>
-<footer>
-    {% include 'footer.html' %}
-</footer>    
+
 </html>

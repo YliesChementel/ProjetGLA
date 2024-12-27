@@ -23,24 +23,7 @@ p {
     font-family: 'PoliceSon';
     color: #1e2a47
 }
- 
-.bandeau {
-    font-family: 'PoliceSon';
-    background: #142038; /* Couleur de fond du bandeau (tu peux la modifier selon ton design) */
-    color: white; /* Couleur du texte */
-    padding: 15px 0; /* Espacement interne */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Ombre du bandeau */
-}
 
-.bandeau h1{
-    font-family: 'PoliceSon';
-}
-
-
-.question {
-    font-family: 'PoliceSon';
-    text-align: center;
-}
 
 .services {
     font-family: 'PoliceSon';
@@ -64,8 +47,99 @@ p {
     color: #1e2b48;
 }
 
+.tableau-wrapper {
+    border-radius: 10px;          /* Applique les coins arrondis au conteneur */
+    overflow: hidden;             /* Masque le débordement pour que les coins arrondis soient visibles */
+    margin-top: 20px;
+    margin: auto;
+    border: 5px solid #FFFF55;
+    width: 50%;
+}
 
 
+.tableau {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableau th, .tableau td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    color: #1e2b48;
+    background-color: #f8f9fa;
+}
+
+.tableau th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+
+
+/* Optionnel : survol des lignes */
+.tableau tr:hover {
+    background-color: #f1f1f1;    /* Changer la couleur de fond au survol */
+}
+
+
+
+
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Assure que le body fait au moins la taille de l'écran */
+}
+
+header {
+    background: #142038;
+    color: white;
+    padding: 1rem;
+}
+
+.bandeau {
+    font-family: 'PoliceSon';
+    background: #142038; /* Couleur de fond du bandeau (tu peux la modifier selon ton design) */
+    color: white; /* Couleur du texte */
+    display: flex;           /* Utilise Flexbox pour aligner les éléments */
+    align-items: center;     /* Aligne verticalement au centre */
+    justify-content: flex-start; /* Aligne les éléments à gauche avec un espacement plus naturel */
+    padding: 10px;           /* Optionnel, pour ajouter de l'espace autour */
+}
+
+.bandeau h1{
+    font-family: 'PoliceSon';
+    margin-right: 30px;
+    margin-top: 0;               /* Évite l'espace par défaut autour du h1 */
+    margin-bottom: 0;               /* Évite l'espace par défaut autour du h1 */
+    font-size: 2rem;         /* Tu peux ajuster la taille de la police selon tes besoins */
+}
+
+.bandeau a {
+    text-decoration: none;   /* Supprime la soulignure des liens */
+    margin-left: 10px;       /* Espace entre les liens, tu peux réduire à 10px pour moins d'espace */
+    font-size: 1rem;         /* Taille de police pour les liens */
+}
+
+.bandeau a:hover {
+    color: #007bff;          /* Change la couleur au survol (si désiré) */
+}
+
+.bandeau h1 a {
+    text-decoration: none;       /* Supprime la soulignure du lien dans le h1 */
+    color: inherit;              /* Le lien héritera de la couleur du h1 */
+    font-size: inherit;          /* Le lien prendra la même taille de police que le h1 */
+}
+
+.bandeau h1 a:hover {
+    color: white;              /* Change la couleur au survol du lien dans le h1 */
+}
+
+main {
+    flex: 1; /* Ce qui permet au contenu de prendre l'espace restant */
+    padding: 2rem;
+}
 
 .titrePage {
     font-family: 'PoliceSon';
@@ -78,48 +152,15 @@ p {
         -2px 2px 0 #000;    /* Ombre gauche et en bas */
 }
 
-
-
-
-.tableau{
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 50px;
-    border: 3px solid #FFFF55;
-}
-
-
-
-
-
 footer {
     margin-top: 50px;
     background: #1e2a47;
     color: #fff;
-    padding: 9px 0;
     text-align: center;
 }
-footer a {
+
+footer a, footer p{
     color: #fff;
     text-decoration: none;
     
-}
-
-/* Appliquer Flexbox à l'ensemble de la page */
-html, body {
-    height: 100%;  /* Important : faire en sorte que le body et html prennent toute la hauteur de la page */
-    margin: 0;     /* Supprimer les marges par défaut */
-}
-
-/* Conteneur principal */
-.container {
-    display: flex;
-    flex-direction: column;  /* Disposer les éléments en colonne */
-    min-height: 100%;        /* S'assurer que le conteneur prend toute la hauteur disponible */
-}
-
-/* Contenu principal (l'espace qui se développe) */
-.main-content {
-    flex-grow: 1;  /* Cette propriété permet de faire grandir le contenu pour occuper tout l'espace restant */
 }

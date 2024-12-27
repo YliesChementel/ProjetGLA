@@ -3,25 +3,10 @@
 {% block content %}
 <h1 class="titrePage">Graphiques des Prix des Cryptomonnaies</h1>
 
+{% for graph in listGraph: %}
 <div>
-    <h2>Bitcoin (BTC)</h2>
-    {{ graphPriceBTC | safe }}
+    {{ graph | safe }}
 </div>
-<div>
-    <h2>Ethereum (ETH)</h2>
-    {{ graphPriceETH | safe }}
-</div>
-<div>
-    <h2>Tether (USDT)</h2>
-    {{ graphPriceUSDT | safe }}
-</div>
-<div>
-    <h2>Solana (SOL)</h2>
-    {{ graphPriceSOL | safe }}
-</div>
-<div>
-    <h2>Binance Coin (BNB)</h2>
-    {{ graphPriceBNB | safe }}
-</div>
+{% endfor %}
 
 {% endblock %}

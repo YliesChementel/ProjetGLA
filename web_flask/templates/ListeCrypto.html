@@ -2,25 +2,31 @@
 
 {% block content %}
 <h1 class="titrePage">Liste des Cryptomonnaies</h1>
-<table  class="tableau">
-    <thead>
-        <tr>
-            <th>Rang</th>
-            <th>Nom</th>
-            <th>Prix</th>
-            <th>Volume</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in cryptoTable: %}
-        <tr>
-            <td>{{ row['rank'] }}</td>
-            <td>{{ row['symbol'] }}<br>{{ row['name'] }}</td>
-            <td>{{ row['price'] }}</td>
-            <td>{{ row['volume'] }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+<!-- Conteneur autour du tableau pour appliquer border-radius -->
+<div class="tableau-wrapper">
+    <table class="tableau table table-bordered">
+        <thead>
+            <tr>
+                <th>Rang</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Capitalisation boursière</th>
+                <th>Volume</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in cryptoTable %}
+            <tr>
+                <td>{{ row['rank'] }}</td>
+                <td>{{ row['symbol'] }}<br><strong>{{ row['name'] }}</strong></td>
+                <td>{{ '{:,.2f}'.format(row['price']) }} €</td>
+                <td></td>
+                <td>{{ '{:,.0f}'.format(row['volume']) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}
