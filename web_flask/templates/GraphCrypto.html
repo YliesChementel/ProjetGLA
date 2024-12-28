@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <h3>Graphique des Prix :</h3>
+    <div>
+        {{ PriceGraph|safe }}
+    </div>
+
+    <h3>Graphique des Volumes :</h3>
+    <div>
+        {{ VolumeGraph|safe }}
+    </div>
+
+    <h3>Graphique en Chandeliers :</h3>
+    <div>
+        {{ CandlestickGraph|safe }}
+    </div>
+
+    <h3>Heatmap :</h3>
+    <div>
+        {{ HeatmapGraph|safe }}
+    </div>
+</div>
+{% endblock %}

@@ -78,8 +78,8 @@ p {
 
 
 /* Optionnel : survol des lignes */
-.tableau tr:hover {
-    background-color: #f1f1f1;    /* Changer la couleur de fond au survol */
+.tableau-wrapper tr:hover {
+    background-color: #ec0404;    /* Changer la couleur de fond au survol */
 }
 
 

@@ -19,7 +19,7 @@
             {% for row in cryptoTable %}
             <tr>
                 <td>{{ row['rank'] }}</td>
-                <td>{{ row['symbol'] }}<br><strong>{{ row['name'] }}</strong></td>
+                <td><a href="{{ url_for('GraphCrypto', id=row['crypto_id']) }}">{{ row['symbol'] }}<br><strong>{{ row['name'] }}</strong></a></td>
                 <td>{{ '{:,.2f}'.format(row['price']) }} €</td>
                 <td></td>
                 <td>{{ '{:,.0f}'.format(row['volume']) }}</td>
