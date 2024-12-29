@@ -74,16 +74,14 @@
                             asset.getString("name"),
                             Integer.parseInt(asset.getString("rank")),
                             asset.optDouble("volumeUsd24Hr", 0.0),
-                            asset.optDouble("priceUsd", 0.0));
+                            asset.optDouble("priceUsd", 0.0),
+                            asset.optDouble("marketCapUsd", 0.0));
 
                     insertIntoCrypto(conn, crypto.getId(), crypto.getSymbol(), crypto.getName());
-                    insertIntoCryptoData(conn, crypto.getId(), crypto.getRank(), crypto.getVolume(), crypto.getPrice(), fetchTime);
+                    insertIntoCryptoData(conn, crypto.getId(), crypto.getRank(), crypto.getVolume(), crypto.getPrice(),crypto.getMarketCap(), fetchTime);
                 }
 
-                displayCrypto(conn);
-                displayCryptoData(conn);
-
-                Thread.sleep(1000);  // 1 seconde
+                Thread.sleep(5000);  // 5 secondes
             }
         }
     }

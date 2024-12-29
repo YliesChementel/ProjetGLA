@@ -29,8 +29,9 @@ public class CryptoDataBase {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "crypto_id TEXT NOT NULL," +
                 "rank INTEGER NOT NULL," +
-                "volume DECIMAL(30,10)," +
-                "price DECIMAL(30,10)," +
+                "volume DECIMAL(30,20)," +
+                "price DECIMAL(30,20)," +
+                "marketCap DECIMAL(30,20),"+
                 "fetchTime TIMESTAMP NOT NULL," +
                 "FOREIGN KEY(crypto_id) REFERENCES Crypto(id));";
 
@@ -66,48 +67,19 @@ public class CryptoDataBase {
         }
     }
 
-    static void insertIntoCryptoData(Connection conn, String cryptoId, int rank, double volume, double price, String fetchTime) {
-        String sql = "INSERT INTO CryptoData(crypto_id, rank, volume, price, fetchTime) VALUES(?, ?, ?, ?, ?)";
+    static void insertIntoCryptoData(Connection conn, String cryptoId, int rank, double volume, double price, double marketCap, String fetchTime) {
+        String sql = "INSERT INTO CryptoData(crypto_id, rank, volume, price, marketCap, fetchTime) VALUES(?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, cryptoId);
             pstmt.setInt(2, rank);
             pstmt.setDouble(3, volume);
             pstmt.setDouble(4, price);
-            pstmt.setString(5, fetchTime);
+            pstmt.setDouble(5, marketCap);
+            pstmt.setString(6, fetchTime);
             pstmt.executeUpdate();
-            String msg = "Données insérées dans 'CryptoData': " + cryptoId + ", " + rank + ", " + volume + ", " + price + ", " + fetchTime;
+            String msg = "Données insérées dans 'CryptoData': " + cryptoId + ", " + rank + ", " + volume + ", " + price + ", " + marketCap + ", " + fetchTime;
             logger.info(msg);
-        } catch (SQLException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    static void displayCrypto(Connection conn) {
-        String sql = "SELECT id, symbol, name FROM Crypto";
-
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                String msg = "ID: " + rs.getString("id") + ", Symbole: " + rs.getString("symbol") + ", Nom: " + rs.getString("name");
-                logger.info(msg);
-            }
-        } catch (SQLException e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    static void displayCryptoData(Connection conn) {
-        String sql = "SELECT id, crypto_id, rank, volume, price, fetchTime FROM CryptoData";
-
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                String msg = "ID: " + rs.getString("id") + ", CryptoId: " + rs.getString("crypto_id") + ", Rank: " + rs.getString("rank") + ", Volume: " + rs.getString("volume") + ", Price: " + rs.getString("price") + ", FetchTime: " + rs.getString("fetchTime");
-                logger.info(msg);
-            }
         } catch (SQLException e) {
             logger.info(e.getMessage());
         }

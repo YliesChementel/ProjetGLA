@@ -13,7 +13,7 @@ public class CryptoTest {
 
     @BeforeEach
     public void setup() {
-        crypto = new Crypto("1","BTC","bitcoin",1,35539793269.721,98397.5942776494);
+        crypto = new Crypto("1","BTC","bitcoin",1,35539793269.721,98397.5942776494,31058341590.5048);
     }
 
     @Test

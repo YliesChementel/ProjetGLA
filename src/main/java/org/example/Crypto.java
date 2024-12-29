@@ -7,14 +7,16 @@ public class Crypto {
     private int rank;
     private double volume;
     private double price;
+    private double marketCap;
 
-    public Crypto(String id, String symbol, String name, int rank, double volume, double price) {
+    public Crypto(String id, String symbol, String name, int rank, double volume, double price, double marketCap) {
         this.id = id;
         this.symbol = symbol;
         this.name = name;
         this.rank = rank;
         this.volume = volume;
         this.price = price;
+        this.marketCap = marketCap;
     }
 
 
@@ -65,4 +67,8 @@ public class Crypto {
     public void setId(String id) {
         this.id = id;
     }
+
+    public double getMarketCap() { return marketCap; }
+
+    public void setMarketCap(double marketCap) { this.marketCap = marketCap; }
 }

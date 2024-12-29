@@ -133,7 +133,7 @@ public class CryptoDataBaseTest {
     @Test
     public void shouldInsertIntoCryptoData() throws SQLException {
         createCryptoData(conn);
-        insertIntoCryptoData(conn,"0",1,1.0,1.0,"dimanche");
+        insertIntoCryptoData(conn,"0",1,1.0,1.0,1.0,"dimanche");
         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CryptoData")) {
             ResultSet rs = stmt.executeQuery();
 
@@ -148,30 +148,12 @@ public class CryptoDataBaseTest {
 
     @Test
     public void shouldThrowWhenIntoCryptoData() throws SQLException {
-        String sql = "INSERT INTO CryptoData(crypto_id, rank, volume, price, fetchTime) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO CryptoData(crypto_id, rank, volume, price, marketCap, fetchTime) VALUES(?, ?, ?, ?, ?, ?)";
         when(connection.prepareStatement(sql)).thenThrow(new SQLException("[SQLITE_ERROR] SQL error or missing database (no such table: CryptoData)"));  // Simule une erreur
 
-        insertIntoCryptoData(connection,"0",1,1.0,1.0,"dimanche");
+        insertIntoCryptoData(connection,"0",1,1.0,1.0,1.0,"dimanche");
 
         verify(connection, times(1)).prepareStatement(sql);
-    }
-
-    @Test
-    public void shouldThrowWhenDisplayCrypto() throws SQLException {
-        when(connection.createStatement()).thenThrow(new SQLException("Erreur de connexion"));  // Simule une erreur
-
-        displayCrypto(connection);
-
-        verify(connection, times(1)).createStatement();
-    }
-
-    @Test
-    public void shouldThrowWhenDisplayCryptoData() throws SQLException {
-        when(connection.createStatement()).thenThrow(new SQLException("Erreur de connexion"));  // Simule une erreur
-
-        displayCryptoData(connection);
-
-        verify(connection, times(1)).createStatement();
     }
 
 }
