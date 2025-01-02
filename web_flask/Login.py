@@ -5,7 +5,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 app = Flask(__name__)
 
 # Configurer la base de données
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Utilisez SQLite ou votre base de données préférée
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Utilisateur.db'
 
 db = SQLAlchemy(app)
 
@@ -44,6 +44,7 @@ with app.app_context():
     users = User.query.all()  # Récupère tous les utilisateurs
     for user in users:
         print(user.username)
+        print(user.password)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -20,12 +20,21 @@ def getAllcrypto_data():
     conn.close()
     return cryptoData_data
 
-def get_crypto_data(id):
+def get_crypto_data(id, start_date=None, end_date=None):
     conn = get_db_connection()  # Connexion à la base de données
-    cryptoData_data = conn.execute('SELECT * FROM CryptoData WHERE crypto_id = ?', (id,)).fetchall()
+    cursor = conn.cursor()
+    query = f"SELECT * FROM CryptoData WHERE crypto_id = ?"
+    params = [id]
+    
+    if start_date:
+        query += " AND fetchTime >= ?"
+        params.append(start_date.strftime('%Y/%m/%d %H:%M:%S'))  # Format de la date comme 'YYYY/MM/DD HH:MM:SS'
+    
+    cursor.execute(query, params)
+    cryptoData_data = cursor.fetchall()
+    
     conn.close()
     return cryptoData_data
-
 
 def get_last_data():
     crypto_data=get_crypto()
@@ -52,6 +61,7 @@ def get_last_data():
                 'symbol': c['symbol'],
                 'price': latest_data[crypto_id]['price'],
                 'volume': latest_data[crypto_id]['volume'],
+                'marketCap':latest_data[crypto_id]['marketCap'],
                 'rank': latest_data[crypto_id]['rank']
             })
     return table        

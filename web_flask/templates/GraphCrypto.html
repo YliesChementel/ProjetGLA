@@ -2,6 +2,23 @@
 
 {% block content %}
 <div>
+    <h3>Choisissez la plage de temps :</h3>
+    <form method="GET" action="/GraphCrypto">
+        {% for key, value in request.args.items() %}
+            {% if key != "time_range" %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endif %}
+        {% endfor %}
+        <label for="time_range">Plage de temps :</label>
+        <select id="time_range" name="time_range" required>
+            <option value="1h">1 Heure</option>
+            <option value="12h">12 Heures</option>
+            <option value="1d">1 Jour</option>
+            <option value="7d">7 Jours</option>
+        </select>
+        <button type="submit">Filtrer</button>
+    </form>
+
     <h3>Graphique des Prix :</h3>
     <div>
         {{ PriceGraph|safe }}
@@ -23,3 +40,4 @@
     </div>
 </div>
 {% endblock %}
+
