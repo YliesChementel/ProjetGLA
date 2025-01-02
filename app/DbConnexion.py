@@ -2,7 +2,7 @@ import sqlite3
 
 def get_db_connection():
     """Retourne une connexion à la base de données."""
-    conn = sqlite3.connect('Crypto.db')
+    conn = sqlite3.connect('instance/Crypto.db')
     conn.row_factory = sqlite3.Row
     return conn
 

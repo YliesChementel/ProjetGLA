@@ -3,7 +3,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 from collections import defaultdict
 from flask import Flask, render_template
-from DbConnexion import get_crypto_data
+from .DbConnexion import get_crypto_data
 import plotly.graph_objects as go
 
 # Fonction pour créer les graphiques de prix
