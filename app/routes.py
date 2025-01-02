@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
-from .models import User, db  
+from .models import User, db, Crypto, Alerte  
 from werkzeug.security import check_password_hash, generate_password_hash
-from .DbConnexion import get_crypto, getAllcrypto_data, get_last_data, get_crypto_data
+from .DbConnexion import *
 from .graphServer import *
 from .Graph import listGraphPrice, listGraphVolume
 import plotly.io as pio
@@ -47,15 +47,62 @@ def Inscription():
 @main.route('/profil')
 @login_required
 def profil():
-    print(current_user.username)
-    return render_template('profil.html', username=current_user.username, email=current_user.email)
-
+    alertes = Alerte.query.filter_by(user_id=current_user.id).all()
+    
+    return render_template('profil.html', username=current_user.username, email=current_user.email, alertes=alertes)
 
 @main.route('/logout')
 @login_required  # S'assure que l'utilisateur est connecté avant de pouvoir se déconnecter
 def logout():
     logout_user()  # Déconnecte l'utilisateur
     return redirect(url_for('main.index'))  # Redirige l'utilisateur vers la page d'accueil ou une autre page
+
+
+@main.route('/Alertes', methods=['GET', 'POST'])
+@login_required
+def Alertes():
+    db.create_all()
+    populate_crypto_table()######
+    if request.method == 'POST':
+        crypto_id = request.form['crypto_id']
+        condition = request.form['condition']  # 'price', 'percentage', etc.
+        threshold_value = float(request.form['threshold_value'])
+        type_alert = request.form['type_alert']  # 'greater_than', 'less_than', etc.
+        
+        # Créer une nouvelle alerte pour l'utilisateur
+        new_alert = Alerte(user_id=current_user.id, 
+                           crypto_id=crypto_id, 
+                           condition=condition, 
+                           threshold_value=threshold_value,
+                           type_alert=type_alert)
+        
+        db.session.add(new_alert)
+        db.session.commit()
+        
+        flash('Alerte créée avec succès!', 'success')
+        return redirect(url_for('main.index'))
+    
+    cryptos = Crypto.query.all()  # Récupérer la liste des cryptomonnaies
+    return render_template('Alertes.html', cryptos=cryptos)
+
+@main.route('/delete_alert/<int:alerte_id>', methods=['POST'])
+@login_required
+def delete_alert(alerte_id):
+    # Vérifier si l'alerte appartient à l'utilisateur connecté
+    alerte = Alerte.query.filter_by(id=alerte_id, user_id=current_user.id).first()
+    
+    if alerte:
+        # Supprimer l'alerte
+        db.session.delete(alerte)
+        db.session.commit()
+    return redirect(url_for('main.profil'))  # Rediriger l'utilisateur vers la page du profil
+
+
+
+
+
+
+
 
 @main.route('/ListeCrypto')
 def ListeCrypto():

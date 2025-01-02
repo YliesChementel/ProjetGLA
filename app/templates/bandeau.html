@@ -3,6 +3,7 @@
 	<a href="{{ url_for('main.ListeCrypto') }}">Crypto</a>
 	<a href="{{ url_for('main.PricePage') }}">Prix</a>
 	<a href="{{ url_for('main.VolumePage') }}">Volume</a>
+	<a href="{{ url_for('main.Alertes') }}">Alertes</a>
 	{% if current_user.is_authenticated %}
     <button><a href="{{ url_for('main.logout') }}">Déconnexion</a></button>
 	<button><a href="{{ url_for('main.profil') }}">Profil</a></button>

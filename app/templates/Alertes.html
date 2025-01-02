@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="POST">
+    <label for="crypto_id">Cryptomonnaie:</label>
+    <select name="crypto_id" id="crypto_id">
+        {% for crypto in cryptos %}
+        <option value="{{ crypto.id }}">{{ crypto.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="condition">Condition:</label>
+    <select name="condition" id="condition">
+        <option value="prix">Prix</option>
+        <option value="Volume">Volume</option>
+        <option value="marketCap">Market Cap</option>
+        <option value="percentage">Variation en pourcentage du prix</option>
+    </select>
+
+    <label for="type_alert">Type d'alerte:</label>
+    <select name="type_alert" id="type_alert">
+        <option value="greater_than">Supérieur à</option>
+        <option value="less_than">Inférieur à</option>
+    </select>
+
+    <label for="threshold_value">Valeur seuil:</label>
+    <input type="number" name="threshold_value" id="threshold_value" required>
+
+    <button type="submit">Créer l'alerte</button>
+</form>
+
+
+
+{% endblock %}

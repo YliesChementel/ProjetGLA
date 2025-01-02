@@ -1,4 +1,5 @@
 import sqlite3
+from .models import db, Crypto
 
 def get_db_connection():
     """Retourne une connexion à la base de données."""
@@ -65,3 +66,28 @@ def get_last_data():
                 'rank': latest_data[crypto_id]['rank']
             })
     return table        
+
+
+
+
+def populate_crypto_table():
+    """Remplir la table Crypto dans la base SQLAlchemy avec les données de la base SQLite."""
+    # Récupérer les données de la table 'Crypto' dans la base SQLite
+    crypto_data = get_crypto()
+    
+    # Pour chaque crypto dans la base SQLite, on l'ajoute à la base SQLAlchemy
+    for crypto in crypto_data:
+        # Vérifier si la crypto existe déjà dans la base SQLAlchemy
+        existing_crypto = Crypto.query.filter_by(symbol=crypto['symbol']).first()
+        
+        # Si la crypto n'existe pas, on l'ajoute
+        if not existing_crypto:
+            new_crypto = Crypto(
+                id=crypto['id'],
+                symbol=crypto['symbol'],
+                name=crypto['name']
+            )
+            db.session.add(new_crypto)
+    
+    # Commit des changements dans la base SQLAlchemy
+    db.session.commit()
