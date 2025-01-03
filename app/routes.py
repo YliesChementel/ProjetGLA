@@ -1,12 +1,11 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
-from .models import User, db, Crypto, Alerte  
 from werkzeug.security import check_password_hash, generate_password_hash
-from .DbConnexion import *
-from .graphServer import *
-from .Graph import listGraphPrice, listGraphVolume
 import plotly.io as pio
 from datetime import datetime, timedelta
+from .DbConnexion import *
+from .graphServer import *
+from .models import User, db, Crypto, Alerte  
 
 main = Blueprint('main', __name__)
 
@@ -81,8 +80,11 @@ def Alertes():
         
         flash('Alerte créée avec succès!', 'success')
         return redirect(url_for('main.index'))
-    
-    cryptos = Crypto.query.all()  # Récupérer la liste des cryptomonnaies
+
+    tableCrypto = get_last_data() # Récupérer la liste des cryptomonnaies
+    cryptos = []
+    for row in tableCrypto :
+        cryptos.append(row['crypto_id'])
     return render_template('Alertes.html', cryptos=cryptos)
 
 @main.route('/delete_alert/<int:alerte_id>', methods=['POST'])
@@ -109,18 +111,6 @@ def ListeCrypto():
     table = get_last_data()
     return render_template('ListeCrypto.html', cryptoTable=table)
 
-@main.route('/PricePage')
-def PricePage():
-    cryptoData_data = getAllcrypto_data()
-    listGraph = listGraphPrice(cryptoData_data, 10)
-    return render_template('PricePage.html', listGraph=listGraph)
-
-@main.route('/VolumePage')
-def VolumePage():
-    cryptoData_data=getAllcrypto_data()
-    listGraph = listGraphVolume(cryptoData_data,10) 
-    return render_template('VolumePage.html', listGraph=listGraph)
-
 @main.route('/GraphCrypto')
 def GraphCrypto():
     id = request.args.get('id')
@@ -145,19 +135,23 @@ def GraphCrypto():
     
     # Créer les graphiques
     PriceGraph = createPriceGraph(crypto_data, id)
+    PredictGraph = createPredictGraph(crypto_data, id)
     VolumeGraph = createVolumeGraph(crypto_data, id)
     CandlestickGraph = createCandlestickGraph(crypto_data, id)
     HeatmapGraph = createHeatmap(crypto_data, id)
+
     
     # Convertir les graphiques en HTML
     PriceGraph_html = pio.to_html(PriceGraph, full_html=False)
     VolumeGraph_html = pio.to_html(VolumeGraph, full_html=False)
     CandlestickGraph_html = pio.to_html(CandlestickGraph, full_html=False)
     HeatmapGraph_html = pio.to_html(HeatmapGraph, full_html=False)
+    prediction_graph_html = pio.to_html(PredictGraph, full_html=False)
     
     return render_template('GraphCrypto.html', 
                            crypto=crypto_data,
                            PriceGraph=PriceGraph_html,
                            VolumeGraph=VolumeGraph_html,
                            CandlestickGraph=CandlestickGraph_html,
-                           HeatmapGraph=HeatmapGraph_html)
+                           HeatmapGraph=HeatmapGraph_html,
+                           PredictGraph=prediction_graph_html)

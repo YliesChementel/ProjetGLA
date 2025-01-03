@@ -24,6 +24,14 @@
         {{ PriceGraph|safe }}
     </div>
 
+    <h3>Graphique des Prévisions</h3>
+    <div>
+        {{ PredictGraph|safe }}
+    </div>
+    <div class="alert alert-warning" role="alert">
+        Attention : Les prévisions basées sur les moyennes mobiles et la régression linéaire ne garantissent pas des résultats futurs exacts. Utilisez ces informations avec prudence.
+    </div>
+
     <h3>Graphique des Volumes :</h3>
     <div>
         {{ VolumeGraph|safe }}

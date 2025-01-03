@@ -65,7 +65,11 @@ def get_last_data():
                 'marketCap':latest_data[crypto_id]['marketCap'],
                 'rank': latest_data[crypto_id]['rank']
             })
-    return table        
+    # Trier le tableau par rang (rank) ou tout autre critère, ici c'est trié par 'rank' pour l'exemple
+    table = sorted(table, key=lambda x: x['rank'])
+
+    # Limiter à 10 éléments
+    return table[:10]        
 
 
 

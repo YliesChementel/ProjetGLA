@@ -1,9 +1,7 @@
-import dash
-from dash import dcc, html
-from dash.dependencies import Input, Output
 from collections import defaultdict
 from flask import Flask, render_template
 from .DbConnexion import get_crypto_data
+from .Predictions import *
 import plotly.graph_objects as go
 
 # Fonction pour créer les graphiques de prix
@@ -18,6 +16,30 @@ def createPriceGraph(cryptoData_data, crypto_id):
     fig = go.Figure(
         data=[go.Scatter(x=date[crypto_id], y=price[crypto_id], name=f"Prix {crypto_id}")],
         layout={'title': f"Évolution du Prix du {crypto_id}", 'xaxis': {'title': 'Date'}, 'yaxis': {'title': 'Prix (USD)'}}
+    )
+    return fig
+
+def createPredictGraph(cryptoData_data, crypto_id):
+    price = [data['price'] for data in cryptoData_data]
+    date = [data['fetchTime'] for data in cryptoData_data]
+
+    
+    # Calculer les prévisions de la moyenne mobile
+    sma = calculate_sma(price, window=5)  # Utilisation d'une fenêtre de 5 jours pour la SMA
+
+    # Calculer la régression linéaire
+    model, predictions = calculate_linear_regression(price, date)
+
+    # Créer le graphique des prédictions
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=date, y=price, mode='lines', name='Prix Réel', line=dict(color='blue', dash='dot')))
+    fig.add_trace(go.Scatter(x=date, y=sma, mode='lines', name='Moyenne Mobile (5 jours)', line=dict(color='orange')))
+    fig.add_trace(go.Scatter(x=date, y=predictions.flatten(), mode='lines', name='Régression Linéaire', line=dict(color='green')))
+    
+    fig.update_layout(
+        title=f"Prévisions du {crypto_id}",
+        xaxis={'title': 'Date'},
+        yaxis={'title': 'Prix (USD)'},
     )
     return fig
 

@@ -6,7 +6,7 @@
     <label for="crypto_id">Cryptomonnaie:</label>
     <select name="crypto_id" id="crypto_id">
         {% for crypto in cryptos %}
-        <option value="{{ crypto.id }}">{{ crypto.name }}</option>
+        <option value="{{ crypto.id }}">{{ crypto }}</option>
         {% endfor %}
     </select>
 

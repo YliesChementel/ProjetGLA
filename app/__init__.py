@@ -34,9 +34,9 @@ def create_app():
     from .routes import main
     app.register_blueprint(main)
 
-    from .alertes import check_new_crypto_data  # Importer après les configurations de db sinon bug
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=check_new_crypto_data, trigger="interval", seconds=5, args=[app])  # Passer l'argument 'crypto_id' via 'args'
-    scheduler.start()
+    #from .alertes import check_new_crypto_data  # Importer après les configurations de db sinon bug
+    #scheduler = BackgroundScheduler()
+    #scheduler.add_job(func=check_new_crypto_data, trigger="interval", seconds=5, args=[app])  # Passer l'argument 'crypto_id' via 'args'
+    #scheduler.start()
 
     return app
