@@ -18,7 +18,7 @@ public class Main {
         HttpRequest request = api.takeApiRequest("https://api.coincap.io/v2/assets");
 
         //Vérification de si les tables existe
-        String cryptoDB = "jdbc:sqlite:Crypto.db";
+        String cryptoDB = "jdbc:sqlite:instance/Crypto.db";
         try (Connection conn = DriverManager.getConnection(cryptoDB)) {
             if (!tableExists(conn, "Crypto")) {
                 createCrypto(conn);

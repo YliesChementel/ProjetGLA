@@ -61,7 +61,7 @@ def logout():
 @login_required
 def Alertes():
     db.create_all()
-    populate_crypto_table()######
+    populate_crypto_table()
     if request.method == 'POST':
         crypto_id = request.form['crypto_id']
         condition = request.form['condition']  # 'price', 'percentage', etc.

@@ -42,16 +42,12 @@ def get_last_data():
     cryptoData_data=getAllcrypto_data()
     latest_data = {}
 
-    # Trier cryptoData par date (timestamp) et obtenir le dernier prix pour chaque crypto
-    for data in cryptoData_data:
-        crypto_id = data['crypto_id']
-        price = data['price']
-        # Si ce crypto_id n'est pas encore dans le dictionnaire ou que le timestamp est plus récent
-        if crypto_id not in latest_data or data['fetchTime'] > latest_data[crypto_id]['fetchTime']:
-            latest_data[crypto_id] = data
+    # Trier cryptoData par date (timestamp) et obtenir le dernier prix pour les 10 dernières crypro
+    for data in cryptoData_data[-10:]:
+        latest_data[data['crypto_id']] = data
 
 
-    # 2. Créer un tableau de résultats en associant les cryptomonnaies avec leur dernier prix
+    # Créer un tableau de résultats en associant les cryptomonnaies avec leur dernier prix
     table = []
     for c in crypto_data:
         crypto_id = c['id']
@@ -65,11 +61,8 @@ def get_last_data():
                 'marketCap':latest_data[crypto_id]['marketCap'],
                 'rank': latest_data[crypto_id]['rank']
             })
-    # Trier le tableau par rang (rank) ou tout autre critère, ici c'est trié par 'rank' pour l'exemple
-    table = sorted(table, key=lambda x: x['rank'])
 
-    # Limiter à 10 éléments
-    return table[:10]        
+    return table        
 
 
 
