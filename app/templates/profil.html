@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Votre Profil</h1>
+
+    <div class="profile-info">
+        <p><strong>Nom d'utilisateur:</strong> <span id="username">{{ username }}</span></p>
+        <p><strong>Email:</strong> <span id="email">{{ email }}</span></p>
+    </div>
+
+    <h2>Vos Alertes</h2>
+    {% if alertes %}
+        <ul>
+            {% for alerte in alertes %}
+                <li>
+                    <strong>{{ alerte.crypto.name }}:</strong> 
+                    Condition: {{ alerte.condition }}
+                    {% if alerte.type_alert == 'greater_than' %}
+                        - Supérieur à
+                    {% else %}
+                        - Inférieur à
+                    {% endif %} 
+                    (Seuil: {{ alerte.threshold_value }})
+                    
+                    <!-- Bouton de suppression -->
+                    <form action="{{ url_for('main.delete_alert', alerte_id=alerte.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Vous n'avez pas d'alertes actuellement.</p>
+    {% endif %}
+</div>
+{% endblock %}
