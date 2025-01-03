@@ -10,7 +10,8 @@ import java.util.logging.Logger;
 
 import static org.example.CryptoDataBase.*;
 
-public class Main {
+public class
+Main {
     public static void main(String[] args) throws SQLException, IOException, InterruptedException {
         Logger logger = Logger.getLogger(Api.class.getName());
         Api api = new Api(logger);
