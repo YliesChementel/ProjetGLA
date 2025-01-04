@@ -14,3 +14,11 @@ class CryptoUser(HttpUser):
     @task
     def graph_crypto(self):
         self.client.get("/GraphCrypto?id=bitcoin")
+
+    @task
+    def graph_crypto(self):
+        self.client.get("/Connexion")
+    
+    @task
+    def graph_crypto(self):
+        self.client.get("/Inscription")

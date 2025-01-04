@@ -9,43 +9,37 @@ def get_db_connection():
 
 def get_crypto():
     """Récupère les données de la table Crypto depuis la base de données."""
-    conn = get_db_connection()
-    crypto_data = conn.execute('SELECT * FROM Crypto').fetchall()
-    conn.close()
-    return crypto_data
+    with get_db_connection() as conn:  # Utilisation de 'with' pour gérer automatiquement la fermeture de la connexion
+        return conn.execute('SELECT * FROM Crypto').fetchall()
 
 def getAllcrypto_data():
     """Récupère les données de la table CryptoData depuis la base de données."""
-    conn = get_db_connection()
-    cryptoData_data = conn.execute('SELECT * FROM CryptoData').fetchall()
-    conn.close()
-    return cryptoData_data
+    with get_db_connection() as conn:
+        return conn.execute('SELECT * FROM CryptoData').fetchall()
 
 def get_crypto_data(id, start_date=None, end_date=None):
-    conn = get_db_connection()  # Connexion à la base de données
-    cursor = conn.cursor()
-    query = f"SELECT * FROM CryptoData WHERE crypto_id = ?"
+    """Récupère les données de CryptoData pour un ID donné avec des filtres sur la date."""
+    query = "SELECT * FROM CryptoData WHERE crypto_id = ?"
     params = [id]
     
     if start_date:
         query += " AND fetchTime >= ?"
         params.append(start_date.strftime('%Y/%m/%d %H:%M:%S'))  # Format de la date comme 'YYYY/MM/DD HH:MM:SS'
     
-    cursor.execute(query, params)
-    cryptoData_data = cursor.fetchall()
-    
-    conn.close()
-    return cryptoData_data
+    with get_db_connection() as conn:  # Connexion dans un bloc 'with'
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        return cursor.fetchall()
 
 def get_last_data():
-    crypto_data=get_crypto()
-    cryptoData_data=getAllcrypto_data()
+    """Récupère les dernières données de CryptoData pour les 10 dernières cryptos."""
+    crypto_data = get_crypto()
+    cryptoData_data = getAllcrypto_data()
     latest_data = {}
 
-    # Trier cryptoData par date (timestamp) et obtenir le dernier prix pour les 10 dernières crypro
+    # Trier cryptoData par date (timestamp) et obtenir le dernier prix pour les 10 dernières cryptos
     for data in cryptoData_data[-10:]:
         latest_data[data['crypto_id']] = data
-
 
     # Créer un tableau de résultats en associant les cryptomonnaies avec leur dernier prix
     table = []
@@ -58,12 +52,11 @@ def get_last_data():
                 'symbol': c['symbol'],
                 'price': latest_data[crypto_id]['price'],
                 'volume': latest_data[crypto_id]['volume'],
-                'marketCap':latest_data[crypto_id]['marketCap'],
+                'marketCap': latest_data[crypto_id]['marketCap'],
                 'rank': latest_data[crypto_id]['rank']
             })
 
-    return table        
-
+    return table
 
 
 
@@ -72,19 +65,21 @@ def populate_crypto_table():
     # Récupérer les données de la table 'Crypto' dans la base SQLite
     crypto_data = get_crypto()
     
-    # Pour chaque crypto dans la base SQLite, on l'ajoute à la base SQLAlchemy
+    # Obtenir toutes les cryptos existantes dans la base SQLAlchemy
+    existing_cryptos = {crypto.symbol for crypto in Crypto.query.all()}
+
+    # Ajouter les cryptos manquantes
+    new_cryptos = []
     for crypto in crypto_data:
-        # Vérifier si la crypto existe déjà dans la base SQLAlchemy
-        existing_crypto = Crypto.query.filter_by(symbol=crypto['symbol']).first()
-        
-        # Si la crypto n'existe pas, on l'ajoute
-        if not existing_crypto:
+        if crypto['symbol'] not in existing_cryptos:
             new_crypto = Crypto(
                 id=crypto['id'],
                 symbol=crypto['symbol'],
                 name=crypto['name']
             )
-            db.session.add(new_crypto)
-    
-    # Commit des changements dans la base SQLAlchemy
-    db.session.commit()
+            new_cryptos.append(new_crypto)
+
+    # Si de nouvelles cryptos existent, les ajouter à la session
+    if new_cryptos:
+        db.session.add_all(new_cryptos)
+        db.session.commit()
