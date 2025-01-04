@@ -21,8 +21,9 @@
                     {% else %}
                         - Inférieur à
                     {% endif %} 
-                    (Seuil: {{ alerte.threshold_value }})
-                    
+                    (Seuil: {{ alerte.threshold_value }}) -
+                    toute les {{ alerte.time }} minutes -
+                    - envoyé pour la dernière fois : {{ alerte.last_sent }}   
                     <!-- Bouton de suppression -->
                     <form action="{{ url_for('main.delete_alert', alerte_id=alerte.id) }}" method="POST" style="display:inline;">
                         <button type="submit" class="btn btn-danger">Supprimer</button>

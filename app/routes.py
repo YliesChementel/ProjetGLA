@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 from .DbConnexion import *
 from .graphServer import *
 from .models import User, db, Crypto, Alerte  
+from flask import current_app as app
+
 
 main = Blueprint('main', __name__)
 
@@ -66,6 +68,7 @@ def Alertes():
         crypto_id = request.form['crypto_id']
         condition = request.form['condition']  # 'price', 'percentage', etc.
         threshold_value = float(request.form['threshold_value'])
+        time = request.form['time']
         type_alert = request.form['type_alert']  # 'greater_than', 'less_than', etc.
         
         # Créer une nouvelle alerte pour l'utilisateur
@@ -73,7 +76,8 @@ def Alertes():
                            crypto_id=crypto_id, 
                            condition=condition, 
                            threshold_value=threshold_value,
-                           type_alert=type_alert)
+                           type_alert=type_alert,
+                           time=time)
         
         db.session.add(new_alert)
         db.session.commit()
@@ -98,12 +102,6 @@ def delete_alert(alerte_id):
         db.session.delete(alerte)
         db.session.commit()
     return redirect(url_for('main.profil'))  # Rediriger l'utilisateur vers la page du profil
-
-
-
-
-
-
 
 
 @main.route('/ListeCrypto')
@@ -134,9 +132,9 @@ def GraphCrypto():
     crypto_data = get_crypto_data(id, start_date=start_date)
     
     # Créer les graphiques
-    PriceGraph = createPriceGraph(crypto_data, id)
+    PriceGraph = createCryptoGraph(crypto_data, id, "price")
     PredictGraph = createPredictGraph(crypto_data, id)
-    VolumeGraph = createVolumeGraph(crypto_data, id)
+    VolumeGraph = createCryptoGraph(crypto_data, id, "volume")
     CandlestickGraph = createCandlestickGraph(crypto_data, id)
     HeatmapGraph = createHeatmap(crypto_data, id)
 

@@ -32,6 +32,8 @@ class Alerte(db.Model):
     condition = db.Column(db.String(150), nullable=False)  # 'price', 'percentage', 'indicator', etc.
     threshold_value = db.Column(db.Float, nullable=False)  # Seuil de l'alerte
     type_alert = db.Column(db.String(50), nullable=False)  # 'greater_than', 'less_than', etc.
+    time = db.Column(db.Integer, nullable=False) # Le temps d'intervalle entre les mails
+    last_sent = db.Column(db.DateTime, nullable=True)  # Heure du dernier envoi d'email
 
     user = db.relationship('User', backref=db.backref('alertes', lazy=True))
     crypto = db.relationship('Crypto', backref=db.backref('alertes', lazy=True))

@@ -6,14 +6,14 @@
     <label for="crypto_id">Cryptomonnaie:</label>
     <select name="crypto_id" id="crypto_id">
         {% for crypto in cryptos %}
-        <option value="{{ crypto.id }}">{{ crypto }}</option>
+        <option value="{{ crypto }}">{{ crypto }}</option>
         {% endfor %}
     </select>
 
     <label for="condition">Condition:</label>
     <select name="condition" id="condition">
-        <option value="prix">Prix</option>
-        <option value="Volume">Volume</option>
+        <option value="price">Prix</option>
+        <option value="volume">Volume</option>
         <option value="marketCap">Market Cap</option>
         <option value="percentage">Variation en pourcentage du prix</option>
     </select>
@@ -26,6 +26,9 @@
 
     <label for="threshold_value">Valeur seuil:</label>
     <input type="number" name="threshold_value" id="threshold_value" required>
+
+    <label for="time">Intervalle maximum d'envoi de mail (minutes):</label>
+    <input type="number" name="time" id="time" required>
 
     <button type="submit">Créer l'alerte</button>
 </form>

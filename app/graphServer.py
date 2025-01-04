@@ -4,20 +4,47 @@ from .DbConnexion import get_crypto_data
 from .Predictions import *
 import plotly.graph_objects as go
 
-# Fonction pour créer les graphiques de prix
-def createPriceGraph(cryptoData_data, crypto_id):
+
+import plotly.graph_objects as go
+from collections import defaultdict
+
+def createCryptoGraph(cryptoData_data, crypto_id, graph_type):
     date = defaultdict(list)
-    price = defaultdict(list)
+    data_values = defaultdict(list)
 
+    # Remplir les données en fonction du type de graphique
     for data in cryptoData_data:
-        price[crypto_id].append(data['price'])
         date[crypto_id].append(data['fetchTime'])
+        if graph_type == 'price':
+            data_values[crypto_id].append(data['price'])
+        elif graph_type == 'volume':
+            data_values[crypto_id].append(data['volume'])
+        else:
+            raise ValueError("graph_type doit être 'price' ou 'volume'.")
 
+    # Définir le titre et l'axe Y en fonction du type de graphique
+    if graph_type == 'price':
+        title = f"Évolution du Prix du {crypto_id}"
+        yaxis_title = 'Prix (USD)'
+    elif graph_type == 'volume':
+        title = f"Évolution du Volume du {crypto_id}"
+        yaxis_title = 'Volume'
+
+    # Création du graphique avec Plotly
     fig = go.Figure(
-        data=[go.Scatter(x=date[crypto_id], y=price[crypto_id], name=f"Prix {crypto_id}")],
-        layout={'title': f"Évolution du Prix du {crypto_id}", 'xaxis': {'title': 'Date'}, 'yaxis': {'title': 'Prix (USD)'}}
+        data=[go.Scatter(x=date[crypto_id], y=data_values[crypto_id], name=f"{graph_type.capitalize()} {crypto_id}")],
+        layout={
+            'title': title,
+            'yaxis': {'title': yaxis_title},
+            'xaxis': {
+                'showticklabels': False,  # Masquer les étiquettes de l'axe des X
+                'showgrid': False,        # Masquer la grille de l'axe des X 
+                'zeroline': False         # Masquer la ligne zéro de l'axe des X 
+            }
+        }
     )
     return fig
+
 
 def createPredictGraph(cryptoData_data, crypto_id):
     price = [data['price'] for data in cryptoData_data]
@@ -40,21 +67,6 @@ def createPredictGraph(cryptoData_data, crypto_id):
         title=f"Prévisions du {crypto_id}",
         xaxis={'title': 'Date'},
         yaxis={'title': 'Prix (USD)'},
-    )
-    return fig
-
-# Fonction pour créer les graphiques de volume
-def createVolumeGraph(cryptoData_data, crypto_id):
-    date = defaultdict(list)
-    volume = defaultdict(list)
-
-    for data in cryptoData_data:
-        volume[crypto_id].append(data['volume'])
-        date[crypto_id].append(data['fetchTime'])
-
-    fig = go.Figure(
-        data=[go.Scatter(x=date[crypto_id], y=volume[crypto_id], name=f"Volume {crypto_id}")],
-        layout={'title': f"Évolution du Volume du {crypto_id}", 'xaxis': {'title': 'Date'}, 'yaxis': {'title': 'Volume'}}
     )
     return fig
 
@@ -95,12 +107,15 @@ def createHeatmap(cryptoData_data, crypto_id):
             date[crypto_id].append(data['fetchTime'])
 
     heatmap_data = [
-        [price[crypto_id][i] - price[crypto_id][i-1] if i > 0 else 0 for i in range(len(price[crypto_id]))]
+    [
+        price[crypto_id][i] - price[crypto_id][i-1] if i > 0 else 0
+        for i in range(1, len(price[crypto_id]))
+    ]
     ]
     
     fig = go.Figure(data=go.Heatmap(
         z=heatmap_data,
-        x=['1h', '24h', '7 jours'],
+        x=[f'Variations {i+1}' for i in range(len(price[crypto_id]))],  # Affichage des Variations de données
         y=[crypto_id],
         colorscale='Viridis',
     ))

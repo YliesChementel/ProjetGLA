@@ -3,6 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from apscheduler.schedulers.background import BackgroundScheduler
 
+def schedule_alerts(app):
+    from .alertes import check_new_crypto_data  # Importer après les configurations de db sinon bug
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=check_new_crypto_data, trigger="interval", seconds=10, args=[app])
+    scheduler.start()
 
 
 # Initialisation de SQLAlchemy
@@ -34,9 +39,6 @@ def create_app():
     from .routes import main
     app.register_blueprint(main)
 
-    #from .alertes import check_new_crypto_data  # Importer après les configurations de db sinon bug
-    #scheduler = BackgroundScheduler()
-    #scheduler.add_job(func=check_new_crypto_data, trigger="interval", seconds=5, args=[app])  # Passer l'argument 'crypto_id' via 'args'
-    #scheduler.start()
+    schedule_alerts(app)
 
     return app
