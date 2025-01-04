@@ -1,25 +1,16 @@
-version: '3.8'
-
 services:
-  app-web:
-    build:
-      context: ./app-web
+  web:
+    build: .
+    container_name: webapp
     ports:
       - "5000:5000"
     volumes:
-      - /ProjetGLA/instance:/ProjetGLA/instance
-    networks:
-      - app-network
-
-  db:
-    image: postgres:13
+      - .:/app
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydatabase
+      - FLASK_ENV=development 
     networks:
-      - app-network
+      - flask-net
 
 networks:
-  app-network:
+  flask-net:
     driver: bridge

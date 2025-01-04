@@ -106,12 +106,10 @@ def createHeatmap(cryptoData_data, crypto_id):
             price[crypto_id].append(data['price'])
             date[crypto_id].append(data['fetchTime'])
 
-    heatmap_data = [
-    [
+    heatmap_data = [[
         price[crypto_id][i] - price[crypto_id][i-1] if i > 0 else 0
         for i in range(1, len(price[crypto_id]))
-    ]
-    ]
+    ]]
     
     fig = go.Figure(data=go.Heatmap(
         z=heatmap_data,
