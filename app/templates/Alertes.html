@@ -25,10 +25,10 @@
     </select>
 
     <label for="threshold_value">Valeur seuil:</label>
-    <input type="number" name="threshold_value" id="threshold_value" required>
+    <input type="number" name="threshold_value" step="0.01" min="0.01" id="threshold_value" required>
 
     <label for="time">Intervalle maximum d'envoi de mail (minutes):</label>
-    <input type="number" name="time" id="time" required>
+    <input type="number" name="time" min="1" id="time" required>
 
     <button type="submit">Créer l'alerte</button>
 </form>

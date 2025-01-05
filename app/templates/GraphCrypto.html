@@ -10,7 +10,8 @@
             {% endif %}
         {% endfor %}
         <label for="time_range">Plage de temps :</label>
-        <select id="time_range" name="time_range" required>
+        <select id="time_range" name="time_range">
+            <option value="">Tout afficher</option>
             <option value="1h">1 Heure</option>
             <option value="12h">12 Heures</option>
             <option value="1d">1 Jour</option>

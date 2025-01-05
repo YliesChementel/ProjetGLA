@@ -3,9 +3,6 @@ from flask import Flask, render_template
 from .DbConnexion import get_crypto_data
 from .Predictions import *
 import plotly.graph_objects as go
-
-
-import plotly.graph_objects as go
 from collections import defaultdict
 
 def createCryptoGraph(cryptoData_data, crypto_id, graph_type):
@@ -50,7 +47,9 @@ def createPredictGraph(cryptoData_data, crypto_id):
     price = [data['price'] for data in cryptoData_data]
     date = [data['fetchTime'] for data in cryptoData_data]
 
-    
+    if not price or not date:
+        raise ValueError(f"Aucune donnée disponible pour le crypto_id {crypto_id} dans la plage de temps sélectionnée.")
+        
     # Calculer les prévisions de la moyenne mobile
     sma = calculate_sma(price, window=5)  # Utilisation d'une fenêtre de 5 jours pour la SMA
 

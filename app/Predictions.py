@@ -19,7 +19,6 @@ def calculate_linear_regression(prices, dates):
     model = LinearRegression()
     model.fit(dates_numeric, prices_numeric)
     
-    # Prédire les valeurs futures
     predictions = model.predict(dates_numeric)
     
     return model, predictions

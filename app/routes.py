@@ -52,6 +52,39 @@ def profil():
     
     return render_template('profil.html', username=current_user.username, email=current_user.email, alertes=alertes)
 
+@main.route('/edit_alert/<int:alerte_id>', methods=['POST'])
+@login_required
+def edit_alert(alerte_id):
+    # Récupérer l'alerte de l'utilisateur
+    alerte = Alerte.query.filter_by(id=alerte_id, user_id=current_user.id).first()
+    if alerte:
+        # Mettre à jour les champs de l'alerte
+        alerte.condition = request.form['condition']
+        alerte.threshold_value = float(request.form['threshold_value'])
+        alerte.type_alert = request.form['type_alert']
+        alerte.time = int(request.form['time'])
+        alerte.last_sent = None  # Réinitialiser le dernier envoi si nécessaire
+        
+        # Sauvegarder les modifications
+        db.session.commit()
+        flash('Alerte mise à jour avec succès!', 'success')
+    else:
+        flash('Alerte introuvable ou non autorisée.', 'danger')
+    
+    return redirect(url_for('main.profil'))
+
+@main.route('/delete_alert/<int:alerte_id>', methods=['POST'])
+@login_required
+def delete_alert(alerte_id):
+    # Vérifier si l'alerte appartient à l'utilisateur connecté
+    alerte = Alerte.query.filter_by(id=alerte_id, user_id=current_user.id).first()
+    
+    if alerte:
+        # Supprimer l'alerte
+        db.session.delete(alerte)
+        db.session.commit()
+    return redirect(url_for('main.profil'))  # Rediriger l'utilisateur vers la page du profil
+
 @main.route('/logout')
 @login_required  # S'assure que l'utilisateur est connecté avant de pouvoir se déconnecter
 def logout():
@@ -91,17 +124,7 @@ def Alertes():
         cryptos.append(row['crypto_id'])
     return render_template('Alertes.html', cryptos=cryptos)
 
-@main.route('/delete_alert/<int:alerte_id>', methods=['POST'])
-@login_required
-def delete_alert(alerte_id):
-    # Vérifier si l'alerte appartient à l'utilisateur connecté
-    alerte = Alerte.query.filter_by(id=alerte_id, user_id=current_user.id).first()
-    
-    if alerte:
-        # Supprimer l'alerte
-        db.session.delete(alerte)
-        db.session.commit()
-    return redirect(url_for('main.profil'))  # Rediriger l'utilisateur vers la page du profil
+
 
 
 @main.route('/ListeCrypto')

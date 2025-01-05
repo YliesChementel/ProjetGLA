@@ -23,8 +23,34 @@
                     {% endif %} 
                     (Seuil: {{ alerte.threshold_value }}) -
                     toute les {{ alerte.time }} minutes -
-                    - envoyé pour la dernière fois : {{ alerte.last_sent }}   
-                    <!-- Bouton de suppression -->
+                    - envoyé pour la dernière fois : {{ alerte.last_sent }}   <br>
+
+
+                    <form action="{{ url_for('main.edit_alert', alerte_id=alerte.id) }}" method="POST" style="display:inline;">
+                        <label for="condition">Condition:</label>
+                        <select name="condition" id="condition" required>
+                            <option value="price" {% if alerte.condition == 'price' %}selected{% endif %}>Prix</option>
+                            <option value="volume" {% if alerte.condition == 'volume' %}selected{% endif %}>Volume</option>
+                            <option value="marketCap" {% if alerte.condition == 'marketCap' %}selected{% endif %}>Market Cap</option>
+                            <option value="percentage" {% if alerte.condition == 'percentage' %}selected{% endif %}>Variation en pourcentage du prix</option>
+                        </select>
+                        
+                        <label for="type_alert">Type:</label>
+                        <select name="type_alert" required>
+                            <option value="greater_than" {% if alerte.type_alert == 'greater_than' %}selected{% endif %}>Supérieur à</option>
+                            <option value="less_than" {% if alerte.type_alert == 'less_than' %}selected{% endif %}>Inférieur à</option>
+                        </select>
+                        
+                        <label for="threshold_value">Seuil:</label>
+                        <input type="number" name="threshold_value" step="0.01" min="0.01" value="{{ alerte.threshold_value }}" required>
+
+                        <label for="time">Temps (min):</label>
+                        <input type="number" name="time" min="1" value="{{ alerte.time }}" required>
+                        
+                        <button type="submit" class="btn btn-primary">Modifier</button>
+                    </form>
+                    
+
                     <form action="{{ url_for('main.delete_alert', alerte_id=alerte.id) }}" method="POST" style="display:inline;">
                         <button type="submit" class="btn btn-danger">Supprimer</button>
                     </form>
