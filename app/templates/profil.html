@@ -2,18 +2,18 @@
 
 {% block content %}
 <div class="container">
-    <h1>Votre Profil</h1>
+    <h1 class="texte-form">Votre Profil</h1>
 
     <div class="profile-info">
         <p><strong>Nom d'utilisateur:</strong> <span id="username">{{ username }}</span></p>
         <p><strong>Email:</strong> <span id="email">{{ email }}</span></p>
     </div>
 
-    <h2>Vos Alertes</h2>
+    <h2 class="texte-form">Vos Alertes</h2>
     {% if alertes %}
         <ul>
             {% for alerte in alertes %}
-                <li>
+                <li class="alert-item">
                     <strong>{{ alerte.crypto.name }}:</strong> 
                     Condition: {{ alerte.condition }}
                     {% if alerte.type_alert == 'greater_than' %}
@@ -25,35 +25,35 @@
                     toute les {{ alerte.time }} minutes -
                     - envoyé pour la dernière fois : {{ alerte.last_sent }}   <br>
 
+                    <div class="alert-actions">
+                        <form action="{{ url_for('main.edit_alert', alerte_id=alerte.id) }}" method="POST" class="alert-form">
+                            <label for="condition">Condition:</label>
+                            <select name="condition" id="condition" required>
+                                <option value="price" {% if alerte.condition == 'price' %}selected{% endif %}>Prix</option>
+                                <option value="volume" {% if alerte.condition == 'volume' %}selected{% endif %}>Volume</option>
+                                <option value="marketCap" {% if alerte.condition == 'marketCap' %}selected{% endif %}>Market Cap</option>
+                                <option value="percentage" {% if alerte.condition == 'percentage' %}selected{% endif %}>Variation en pourcentage du prix</option>
+                            </select>
+                            
+                            <label for="type_alert">Type:</label>
+                            <select name="type_alert" required>
+                                <option value="greater_than" {% if alerte.type_alert == 'greater_than' %}selected{% endif %}>Supérieur à</option>
+                                <option value="less_than" {% if alerte.type_alert == 'less_than' %}selected{% endif %}>Inférieur à</option>
+                            </select>
+                            
+                            <label for="threshold_value">Seuil:</label>
+                            <input type="number" name="threshold_value" step="0.01" min="0.01" value="{{ alerte.threshold_value }}" required>
 
-                    <form action="{{ url_for('main.edit_alert', alerte_id=alerte.id) }}" method="POST" style="display:inline;">
-                        <label for="condition">Condition:</label>
-                        <select name="condition" id="condition" required>
-                            <option value="price" {% if alerte.condition == 'price' %}selected{% endif %}>Prix</option>
-                            <option value="volume" {% if alerte.condition == 'volume' %}selected{% endif %}>Volume</option>
-                            <option value="marketCap" {% if alerte.condition == 'marketCap' %}selected{% endif %}>Market Cap</option>
-                            <option value="percentage" {% if alerte.condition == 'percentage' %}selected{% endif %}>Variation en pourcentage du prix</option>
-                        </select>
-                        
-                        <label for="type_alert">Type:</label>
-                        <select name="type_alert" required>
-                            <option value="greater_than" {% if alerte.type_alert == 'greater_than' %}selected{% endif %}>Supérieur à</option>
-                            <option value="less_than" {% if alerte.type_alert == 'less_than' %}selected{% endif %}>Inférieur à</option>
-                        </select>
-                        
-                        <label for="threshold_value">Seuil:</label>
-                        <input type="number" name="threshold_value" step="0.01" min="0.01" value="{{ alerte.threshold_value }}" required>
+                            <label for="time">Temps (min):</label>
+                            <input type="number" name="time" min="1" value="{{ alerte.time }}" required>
+                            
+                            <button type="submit" class="btn btn-primary">Modifier</button>
+                        </form>
 
-                        <label for="time">Temps (min):</label>
-                        <input type="number" name="time" min="1" value="{{ alerte.time }}" required>
-                        
-                        <button type="submit" class="btn btn-primary">Modifier</button>
-                    </form>
-                    
-
-                    <form action="{{ url_for('main.delete_alert', alerte_id=alerte.id) }}" method="POST" style="display:inline;">
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                    </form>
+                        <form action="{{ url_for('main.delete_alert', alerte_id=alerte.id) }}" method="POST" class="alert-form">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </div>
                 </li>
             {% endfor %}
         </ul>

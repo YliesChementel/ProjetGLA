@@ -23,7 +23,6 @@ def Connexion():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
-            flash('Connexion réussie!', 'success')
             return redirect(url_for('main.index'))
         else:
             flash('Nom d\'utilisateur ou mot de passe incorrect.')

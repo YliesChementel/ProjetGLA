@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
+<div class="AllGraphes">
     <h3>Choisissez la plage de temps :</h3>
     <form method="GET" action="/GraphCrypto">
         {% for key, value in request.args.items() %}
@@ -21,12 +21,12 @@
     </form>
 
     <h3>Graphique des Prix :</h3>
-    <div>
+    <div class="graphe">
         {{ PriceGraph|safe }}
     </div>
 
     <h3>Graphique des Prévisions</h3>
-    <div>
+    <div class="graphe">
         {{ PredictGraph|safe }}
     </div>
     <div class="alert alert-warning" role="alert">
@@ -34,17 +34,17 @@
     </div>
 
     <h3>Graphique des Volumes :</h3>
-    <div>
+    <div class="graphe">
         {{ VolumeGraph|safe }}
     </div>
 
     <h3>Graphique en Chandeliers :</h3>
-    <div>
+    <div class="graphe">
         {{ CandlestickGraph|safe }}
     </div>
 
     <h3>Heatmap :</h3>
-    <div>
+    <div class="graphe">
         {{ HeatmapGraph|safe }}
     </div>
 </div>

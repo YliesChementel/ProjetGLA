@@ -104,7 +104,7 @@ header {
     color: white; /* Couleur du texte */
     display: flex;           /* Utilise Flexbox pour aligner les éléments */
     align-items: center;     /* Aligne verticalement au centre */
-    justify-content: flex-start; /* Aligne les éléments à gauche avec un espacement plus naturel */
+    justify-content: space-between; /* Aligne les éléments à gauche avec un espacement plus naturel */
     padding: 10px;           /* Optionnel, pour ajouter de l'espace autour */
 }
 
@@ -136,6 +136,23 @@ header {
     color: white;              /* Change la couleur au survol du lien dans le h1 */
 }
 
+.liens-bandeau {
+    display: flex;
+    justify-content: flex-start; /* Aligne les éléments d'authentification à droite */
+    gap: 10px; /* Espace entre les boutons */
+}
+
+.boutons-bandeau button {
+    background-color: white;  /* Couleur de fond du bouton (bleu) */
+    border-radius: 5px;
+}
+
+.boutons-bandeau {
+    display: flex;
+    justify-content: flex-end; /* Aligne les éléments d'authentification à droite */
+    gap: 10px; /* Espace entre les boutons */
+}
+
 main {
     flex: 1; /* Ce qui permet au contenu de prendre l'espace restant */
     padding: 2rem;
@@ -163,4 +180,102 @@ footer a, footer p{
     color: #fff;
     text-decoration: none;
     
+}
+
+
+
+
+.form-co {
+    font-family: 'PoliceSon';
+    max-width: 400px;    
+    margin: 0 auto;         
+    padding: 20px;            
+    background-color: #fff;
+    border-radius: 8px;      
+    border: 5px solid #FFFF55;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style pour les titres */
+.texte-form{
+    text-align: center;       /* Centre le titre */
+    font-family: 'PoliceSon', sans-serif; /* Police personnalisée */
+    color: #333;              /* Couleur sombre pour le titre */
+    margin-bottom: 20px;      /* Espacement sous le titre */
+}
+
+/* Style pour les labels */
+.label-co {
+    font-family: 'PoliceSon';
+    display: block;           /* Les labels sont en bloc, sur une ligne à part */
+    margin-bottom: 8px;       /* Espacement sous les labels */
+    font-size: 1rem;          /* Taille de police */
+    color: #333;              /* Couleur du texte */
+}
+
+.flash{
+    text-align: center;  
+}
+
+
+.form-alerte {
+    font-family: 'PoliceSon';           
+    padding: 20px;            
+    background-color: #fff;
+    border-radius: 8px;      
+    border: 5px solid #FFFF55;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.label-alerte {
+    font-family: 'PoliceSon';
+    font-size: 1rem;          /* Taille de police */
+    color: #333;              /* Couleur du texte */
+}
+
+
+
+
+.profile-info {
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px solid #FFFF55;
+    text-align: center;  
+}
+
+
+
+.alert-item {
+    background-color: white;
+    color: #333;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px solid #FFFF55;
+}
+
+.alert-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.alert-form {
+    display: inline-block;
+}
+
+.AllGraphes {
+    font-family: 'PoliceSon';           
+    color: #333;
+}
+
+.AllGraphes h3{
+    font-family: 'PoliceSon';           
+    color: #333;
+}
+
+.graphe{
+    border: 2px solid #FFFF55;
+    border-radius: 8px;
 }

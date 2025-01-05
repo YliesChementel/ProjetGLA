@@ -2,15 +2,15 @@
 
 {% block content %}
 
-<form method="POST">
-    <label for="crypto_id">Cryptomonnaie:</label>
+<form method="POST" class="form-co">
+    <label class="label-co" for="crypto_id">Cryptomonnaie:</label>
     <select name="crypto_id" id="crypto_id">
         {% for crypto in cryptos %}
         <option value="{{ crypto }}">{{ crypto }}</option>
         {% endfor %}
     </select>
 
-    <label for="condition">Condition:</label>
+    <label class="label-co" for="condition">Condition:</label>
     <select name="condition" id="condition">
         <option value="price">Prix</option>
         <option value="volume">Volume</option>
@@ -18,17 +18,17 @@
         <option value="percentage">Variation en pourcentage du prix</option>
     </select>
 
-    <label for="type_alert">Type d'alerte:</label>
+    <label class="label-co" for="type_alert">Type d'alerte:</label>
     <select name="type_alert" id="type_alert">
         <option value="greater_than">Supérieur à</option>
         <option value="less_than">Inférieur à</option>
     </select>
 
-    <label for="threshold_value">Valeur seuil:</label>
+    <label class="label-co" for="threshold_value">Valeur seuil:</label>
     <input type="number" name="threshold_value" step="0.01" min="0.01" id="threshold_value" required>
 
-    <label for="time">Intervalle maximum d'envoi de mail (minutes):</label>
-    <input type="number" name="time" min="1" id="time" required>
+    <label class="label-co" for="time">Intervalle maximum d'envoi de mail (minutes):</label>
+    <input type="number" name="time" min="1" id="time" required><br><br>
 
     <button type="submit">Créer l'alerte</button>
 </form>

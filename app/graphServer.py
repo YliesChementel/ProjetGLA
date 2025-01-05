@@ -49,7 +49,7 @@ def createPredictGraph(cryptoData_data, crypto_id):
 
     if not price or not date:
         raise ValueError(f"Aucune donnée disponible pour le crypto_id {crypto_id} dans la plage de temps sélectionnée.")
-        
+
     # Calculer les prévisions de la moyenne mobile
     sma = calculate_sma(price, window=5)  # Utilisation d'une fenêtre de 5 jours pour la SMA
 
@@ -64,7 +64,12 @@ def createPredictGraph(cryptoData_data, crypto_id):
     
     fig.update_layout(
         title=f"Prévisions du {crypto_id}",
-        xaxis={'title': 'Date'},
+        xaxis={
+            'title': 'Date',
+            'showticklabels': False, 
+            'showgrid': False,
+            'zeroline': False    
+        },
         yaxis={'title': 'Prix (USD)'},
     )
     return fig
@@ -92,7 +97,14 @@ def createCandlestickGraph(cryptoData_data, crypto_id):
         close=close_price[crypto_id],
         name=f"Chandeliers {crypto_id}"
     )])
-    fig.update_layout(title=f"Graphique en Chandeliers du {crypto_id}")
+    fig.update_layout(
+        title=f"Graphique en Chandeliers du {crypto_id}",
+        xaxis={
+            'showticklabels': False,
+            'showgrid': False,       
+            'zeroline': False  
+        }
+    )
     return fig
 
 # Fonction pour créer un heatmap
@@ -116,7 +128,14 @@ def createHeatmap(cryptoData_data, crypto_id):
         y=[crypto_id],
         colorscale='Viridis',
     ))
-    fig.update_layout(title=f"Heatmap du {crypto_id} - Variation des Prix")
+    fig.update_layout(
+        title=f"Heatmap du {crypto_id} - Variation des Prix",
+        xaxis={
+            'showticklabels': False,  
+            'showgrid': False,       
+            'zeroline': False        
+        }
+    )
 
     return fig
 
