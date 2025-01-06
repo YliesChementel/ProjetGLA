@@ -47,9 +47,6 @@ def createPredictGraph(cryptoData_data, crypto_id):
     price = [data['price'] for data in cryptoData_data]
     date = [data['fetchTime'] for data in cryptoData_data]
 
-    if not price or not date:
-        raise ValueError(f"Aucune donnée disponible pour le crypto_id {crypto_id} dans la plage de temps sélectionnée.")
-
     # Calculer les prévisions de la moyenne mobile
     sma = calculate_sma(price, window=5)  # Utilisation d'une fenêtre de 5 jours pour la SMA
 

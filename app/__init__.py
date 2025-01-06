@@ -8,7 +8,7 @@ def schedule_alerts(app):
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=check_new_crypto_data, trigger="interval", seconds=10, args=[app])
     scheduler.start()
-
+ 
 
 # Initialisation de SQLAlchemy
 db = SQLAlchemy()
