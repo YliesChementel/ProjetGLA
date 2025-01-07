@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app
+  name: webapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flask-app
+      app: webapp
   template:
     metadata:
       labels:
-        app: flask-app
+        app: webapp
     spec:
       containers:
-      - name: flask-app
-        image: flask-app
+      - name: webapp
+        image: ylies/projetgla-web:latest
         ports:
         - containerPort: 5000
