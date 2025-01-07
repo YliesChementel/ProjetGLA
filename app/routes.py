@@ -1,12 +1,13 @@
+from flask import current_app as app
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 import plotly.io as pio
 from datetime import datetime, timedelta
-from .DbConnexion import *
-from .graphServer import *
-from .models import User, db, Crypto, Alerte  
-from flask import current_app as app
+from .Connexion_Crypto import *
+from .Graphes import *
+from .Models import User, db, Crypto, Alerte  
+
 
 
 main = Blueprint('main', __name__)

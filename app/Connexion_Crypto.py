@@ -1,5 +1,5 @@
 import sqlite3
-from .models import db, Crypto
+from .Models import db, Crypto
 
 def get_db_connection():
     """Retourne une connexion à la base de données."""

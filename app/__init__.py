@@ -4,7 +4,7 @@ from flask_login import LoginManager
 from apscheduler.schedulers.background import BackgroundScheduler
 
 def schedule_alerts(app):
-    from .alertes import check_new_crypto_data  # Importer après les configurations de db sinon bug
+    from .Alertes import check_new_crypto_data  # Importer après les configurations de db sinon bug
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=check_new_crypto_data, trigger="interval", seconds=10, args=[app])
     scheduler.start()
@@ -29,14 +29,13 @@ def create_app():
     login_manager = LoginManager(app)
     login_manager.login_view = 'main.Connexion'  # Nom de la route de connexion
 
-    from .models import User  # Importer le modèle utilisateur
-
+    from .Models import User
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))  # Récupérer l'utilisateur depuis la base de données par son ID
 
     # Importer les routes
-    from .routes import main
+    from .Routes import main
     app.register_blueprint(main)
 
     schedule_alerts(app)

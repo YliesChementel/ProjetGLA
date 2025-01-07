@@ -1,9 +1,9 @@
 from collections import defaultdict
 from flask import Flask, render_template
-from .DbConnexion import get_crypto_data
-from .Predictions import *
 import plotly.graph_objects as go
 from collections import defaultdict
+from .Connexion_Crypto import get_crypto_data
+from .Predictions import *
 
 def createCryptoGraph(cryptoData_data, crypto_id, graph_type):
     date = defaultdict(list)
