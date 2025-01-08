@@ -13,13 +13,20 @@ def schedule_alerts(app):
 # Initialisation de SQLAlchemy
 db = SQLAlchemy()
 
-def create_app():
+def create_app(config_name):
     app = Flask(__name__)
     
     # Charger la configuration
     app.config['SECRET_KEY'] = 'your_secret_key'
-    # Configurer la base de données utilisateur
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Utilisateur.db'
+
+    if config_name == 'testing':
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Utiliser une base de données en mémoire pour les tests
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['TESTING'] = True
+
+    if config_name == 'user':
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Utilisateur.db'
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # désactive les modifications inutiles
     
     # Initialiser l'extension SQLAlchemy avec l'application Flask

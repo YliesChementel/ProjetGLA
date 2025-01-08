@@ -27,6 +27,7 @@ def send_email(subject, body, to_email):
         print("Email envoyé avec succès")
     except Exception as e:
         print(f"Erreur lors de l'envoi de l'email : {e}")
+        raise smtplib.SMTPException(f"Erreur lors de l'envoi de l'email : {e}")
 
 
 #Fonction pour vérifier les nouvelles données dans CryptoData
@@ -41,9 +42,9 @@ def check_new_crypto_data(app):
 
     cursor.execute("SELECT * FROM CryptoData WHERE fetchTime > ? ORDER BY fetchTime DESC LIMIT 1", (date,))
     new_data = cursor.fetchall()
-
+ 
     if new_data:
-        print(f"Nouvelles données détectées")
+        print("Nouvelles données détectées")
         # Sélectionne uniquement la dernière ligne des nouvelles données
         last_row = new_data[0]
         print(last_row)

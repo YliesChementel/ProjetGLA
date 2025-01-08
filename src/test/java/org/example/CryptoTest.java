@@ -82,4 +82,15 @@ public class CryptoTest {
         assertEquals(98397.5942776494,crypto.getPrice());
     }
 
+    @Test
+    void shouldReturnMarketCapofBitcoin() {
+        assertEquals(31058341590.5048,crypto.getMarketCap());
+    }
+
+    @Test
+    void shouldSetMarketCapofBitcoin() {
+        crypto.setMarketCap(98397.5942776494);
+        assertEquals(98397.5942776494,crypto.getMarketCap());
+    }
+
 }
