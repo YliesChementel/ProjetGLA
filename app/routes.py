@@ -6,7 +6,7 @@ import plotly.io as pio
 from datetime import datetime, timedelta
 from .Connexion_Crypto import *
 from .Graphes import *
-from .Models import User, db, Crypto, Alerte  
+from .models import User, db, Crypto, Alerte  
 
 
 

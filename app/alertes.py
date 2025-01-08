@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from sqlalchemy.orm import joinedload
-from .Models import  db, Alerte  
+from .models import  db, Alerte  
 from .Connexion_Crypto import get_crypto_data, get_db_connection
 
 
