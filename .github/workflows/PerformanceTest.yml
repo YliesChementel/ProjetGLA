@@ -14,31 +14,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python and install dependencies
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
-
-      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install locust
 
-      - name: Start Flask server
+      - name: Verify Locust installation
+        run: locust --version
+
+      - name: Start Flask, run Locust tests, and stop Flask
         run: |
           nohup python run.py & echo $! > flask_pid
+          sleep 5
+          locust -f locustWeb.py --headless -u 10 -r 2 --run-time 1m --host=http://127.0.0.1:5000 --csv=locust_report
+          kill $(cat flask_pid)
         env:
           FLASK_APP: run.py
           FLASK_ENV: production
 
-      - name: Wait for Flask to start
-        run: |
-          sleep 5
-
-      - name: Run Locust tests
-        run: |
-          locust -f locustWeb.py --headless -u 10 -r 2 --run-time 1m --host=http://127.0.0.1:5000 --csv=locust_report
-
-      - name: Stop Flask server
-        run: |
-          kill $(cat flask_pid)
