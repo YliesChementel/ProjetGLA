@@ -24,6 +24,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./AppWeb/requirements.txt
           pip install locust
+      - name: Check if database exists
+        run: |
+          if [ ! -f /home/runner/work/ProjetGLA/ProjetGLA/instance/Crypto.db ]; then
+            echo "Database file does not exist!";
+            exit 1;
+          fi
 
       - name: Start Flask server
         run: |
