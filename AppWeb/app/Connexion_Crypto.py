@@ -1,10 +1,12 @@
 import sqlite3
 from .models import db, Crypto
+import os
 
 
 def get_db_connection():
     """Retourne une connexion à la base de données."""
-    conn = sqlite3.connect('../instance/Crypto.db')
+    db_path = os.getenv('DB_PATH', '../instance/Crypto.db')
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 

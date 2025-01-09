@@ -19,8 +19,11 @@ Main {
         HttpRequest request = api.takeApiRequest("https://api.coincap.io/v2/assets");
 
         //Vérification de si les tables existe
-        String cryptoDB = "jdbc:sqlite:../instance/Crypto.db";
-        try (Connection conn = DriverManager.getConnection(cryptoDB)) {
+        String cryptoDB = System.getenv("DB_PATH");  // Récupère la variable d'environnement DB_PATH
+        if (cryptoDB == null) {
+            cryptoDB = "../instance/Crypto.db";  // Valeur par défaut si la variable d'environnement n'est pas définie
+        }
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:"+cryptoDB)) {
             if (!tableExists(conn, "Crypto")) {
                 createCrypto(conn);
             }

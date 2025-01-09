@@ -1,26 +1,33 @@
 services:
   web:
-    build: ./AppWeb/app
+    build: ./AppWeb
     container_name: appWeb
     ports:
       - "5000:5000"
     volumes:
-      - db-volume:/appConsole/instance
+      - db-volume:/shared/instance
     environment:
-      - FLASK_ENV=development 
+      - FLASK_ENV=development
+      - DATABASE_URL=sqlite:///Utilisateur.db
+      - EMAIL_USER=cryptofrontiersnotif@gmail.com
+      - EMAIL_PASSWORD=wgks xsao gjkx npqq 
+      - SECRET_KEY=your_secret_key
+      - DB_PATH=/shared/instance/Crypto.db  # Définir la variable d'environnement pour Python
     networks:
       - flask-net
 
   console:
-    build: ./AppConsole/app
+    build: ./AppConsole
     container_name: appConsole
     ports:
       - "8080:8080"
     volumes:
-      - db-volume:/appConsole/instance
+      - db-volume:/shared/instance
     environment:
-      - DB_PATH=/appConsole/instance/Crypto.db
+      - DB_PATH=/shared/instance/Crypto.db  # Définir la variable d'environnement pour Java
     restart: always
+    networks:
+      - flask-net
 
 networks:
   flask-net:
@@ -29,3 +36,4 @@ networks:
 volumes:
   db-volume:
     driver: local
+
