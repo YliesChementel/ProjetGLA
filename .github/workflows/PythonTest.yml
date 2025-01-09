@@ -25,7 +25,13 @@ jobs:
           pip install pytest pytest-cov
 
       - name: Run tests
-        run: PYTHONPATH=AppWeb pytest --cov=app AppWeb/tests/
+        run: PYTHONPATH=AppWeb pytest --cov=app AppWeb/tests/ --cov-report html:reports/htmlcov --cov-report term
         env:
           DB_PATH: ${{ secrets.DB_PATH }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: reports/htmlcov/
