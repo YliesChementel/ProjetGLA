@@ -40,7 +40,7 @@ def create_app(config_name):
     
     # Initialiser Flask-Login
     login_manager = LoginManager(app)
-    login_manager.login_view = 'main.Connexion'  # Nom de la route de connexion
+    login_manager.login_view = 'main.Connexion'  
 
     from .models import User
     @login_manager.user_loader
