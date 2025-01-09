@@ -28,6 +28,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Run tests and generate coverage
+        working-directory: AppConsole
         run: mvn clean test jacoco:report
 
       - name: Upload coverage report
