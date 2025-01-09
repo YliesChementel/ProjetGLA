@@ -22,12 +22,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r ./AppWeb/requirements.txt
           pip install locust
 
       - name: Start Flask server
         run: |
-          nohup python run.py & echo $! > flask_pid
+          nohup python ./AppWeb/run.py & echo $! > flask_pid
         env:
           FLASK_APP: run.py
           FLASK_ENV: production
@@ -41,7 +41,7 @@ jobs:
 
       - name: Run Locust tests and save results
         run: |
-          locust -f locustWeb.py --headless -u 10 -r 2 --run-time 1m --host=http://127.0.0.1:5000 --csv=locust_report
+          locust -f ./AppWeb/locustWeb.py --headless -u 10 -r 2 --run-time 1m --host=http://127.0.0.1:5000 --csv=locust_report
 
       - name: Upload Locust report
         uses: actions/upload-artifact@v3

@@ -1,16 +1,31 @@
 services:
   web:
-    build: .
-    container_name: webapp
+    build: ./AppWeb/app
+    container_name: appWeb
     ports:
       - "5000:5000"
     volumes:
-      - .:/app
+      - db-volume:/appConsole/instance
     environment:
       - FLASK_ENV=development 
     networks:
       - flask-net
 
+  console:
+    build: ./AppConsole/app
+    container_name: appConsole
+    ports:
+      - "8080:8080"
+    volumes:
+      - db-volume:/appConsole/instance
+    environment:
+      - DB_PATH=/appConsole/instance/Crypto.db
+    restart: always
+
 networks:
   flask-net:
     driver: bridge
+
+volumes:
+  db-volume:
+    driver: local
