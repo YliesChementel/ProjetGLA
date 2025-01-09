@@ -2,7 +2,8 @@ from locust import HttpUser, task, between, SequentialTaskSet
 import random
 from time import sleep
 from app.Connexion_Crypto import get_crypto
-
+import os
+from dotenv import load_dotenv
 
 class CryptoUser(HttpUser):
     wait_time = between(1, 3)
@@ -15,6 +16,9 @@ class CryptoUser(HttpUser):
     @task
     def list_crypto(self):
         """Test de la page de la liste des cryptomonnaies"""
+        db_path = os.getenv('DB_PATH', '../instance/Crypto.db')
+        if not os.path.exists(db_path):
+            print(f"Warning: The database path '{db_path}' does not exist!")
         self.client.get("/ListeCrypto")
 
     @task
