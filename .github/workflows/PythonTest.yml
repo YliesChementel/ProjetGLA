@@ -25,4 +25,4 @@ jobs:
           pip install pytest pytest-cov
 
       - name: Run tests
-        run: pytest --cov=app /home/runner/work/ProjetGLA/ProjetGLA/AppWeb/tests/
+        run: PYTHONPATH=AppWeb pytest --cov=app AppWeb/tests/
