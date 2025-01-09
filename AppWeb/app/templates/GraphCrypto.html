@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="AllGraphes">
+    <h3>Choisissez la plage de temps :</h3>
+    <form method="GET" action="/GraphCrypto">
+        {% for key, value in request.args.items() %}
+            {% if key != "time_range" %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endif %}
+        {% endfor %}
+        <label for="time_range">Plage de temps :</label>
+        <select id="time_range" name="time_range">
+            <option value="">Tout afficher</option>
+            <option value="1h">1 Heure</option>
+            <option value="12h">12 Heures</option>
+            <option value="1d">1 Jour</option>
+            <option value="7d">7 Jours</option>
+        </select>
+        <button type="submit">Filtrer</button>
+    </form>
+
+    <h3>Graphique des Prix :</h3>
+    <div class="graphe">
+        {{ PriceGraph|safe }}
+    </div>
+
+    <h3>Graphique des Prévisions</h3>
+    <div class="graphe">
+        {{ PredictGraph|safe }}
+    </div>
+    <div class="alert alert-warning" role="alert">
+        Attention : Les prévisions basées sur les moyennes mobiles et la régression linéaire ne garantissent pas des résultats futurs exacts. Utilisez ces informations avec prudence.
+    </div>
+
+    <h3>Graphique des Volumes :</h3>
+    <div class="graphe">
+        {{ VolumeGraph|safe }}
+    </div>
+
+    <h3>Graphique en Chandeliers :</h3>
+    <div class="graphe">
+        {{ CandlestickGraph|safe }}
+    </div>
+
+    <h3>Heatmap :</h3>
+    <div class="graphe">
+        {{ HeatmapGraph|safe }}
+    </div>
+</div>
+{% endblock %}
+

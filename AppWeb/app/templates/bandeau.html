@@ -1,0 +1,17 @@
+<div class="bandeau">
+	<div class="liens-bandeau">
+		<h1><a href="{{ url_for('main.index') }}">CryptoFrontiers</a></h1>
+		<a href="{{ url_for('main.ListeCrypto') }}">Crypto</a>
+		<a href="{{ url_for('main.Alertes') }}">Alertes</a>
+	</div>
+	<div class="boutons-bandeau">
+        {% if current_user.is_authenticated %}
+            <button><a href="{{ url_for('main.logout') }}">Déconnexion</a></button>
+            <button><a href="{{ url_for('main.profil') }}">Profil</a></button>
+        {% else %}
+            <button><a href="{{ url_for('main.Connexion') }}">Connexion</a></button>
+            <button><a href="{{ url_for('main.Inscription') }}">Inscription</a></button>
+        {% endif %}
+    </div>
+	
+</div>

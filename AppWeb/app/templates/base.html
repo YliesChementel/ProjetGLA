@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>CryptoFrontiers</title>
+</head>
+<body>
+    <div class="page-wrapper"> 
+        <header>
+            {% include 'bandeau.html' %}
+        </header>
+        <main>
+            <!-- Section dynamique qui sera remplie par chaque page -->
+            {% block content %}
+            {% endblock %}
+        </main>
+        <footer>
+            {% include 'footer.html' %}
+        </footer> 
+    </div>   
+</body>
+
+</html>
