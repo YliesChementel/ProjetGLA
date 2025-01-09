@@ -32,6 +32,7 @@ jobs:
         run: mvn clean test jacoco:report
 
       - name: Upload coverage report
+        working-directory: AppConsole
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
