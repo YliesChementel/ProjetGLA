@@ -28,7 +28,9 @@ jobs:
         run: ls
       
       - name: Check database file
-        run: ls -l ProjetGLA/instance/Crypto.db
+        run: ls -l instance/Crypto.db
 
       - name: Run tests
         run: PYTHONPATH=AppWeb pytest --cov=app AppWeb/tests/
+        env:
+          DB_PATH: ${{ secrets.DB_PATH }}
