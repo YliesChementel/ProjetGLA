@@ -1,9 +1,7 @@
 from locust import HttpUser, task, between, SequentialTaskSet
 import random
 from time import sleep
-from app.Connexion_Crypto import get_crypto
-import os
-from dotenv import load_dotenv
+
 
 class CryptoUser(HttpUser):
     wait_time = between(1, 3)
@@ -16,17 +14,12 @@ class CryptoUser(HttpUser):
     @task
     def list_crypto(self):
         """Test de la page de la liste des cryptomonnaies"""
-        db_path = os.getenv('DB_PATH', '../instance/Crypto.db')
-        print("test    :    ",db_path)
-        if not os.path.exists(db_path):
-            print(f"Warning: The database path '{db_path}' does not exist!")
         self.client.get("/ListeCrypto")
 
     @task
     def graph_crypto(self):
         """Test d'une page de graphique avec une crypto particulière"""
-        crypto_data = get_crypto()
-        choice = [c['id'] for c in crypto_data]  
+        choice = ['bitcoin','ethereum','tether']  
         crypto_id = random.choice(choice)
         time = [None,'1h','12h','1d','7d']
         time_random = random.choice(time)
@@ -69,8 +62,7 @@ class UserBehavior(SequentialTaskSet):
         sleep(2)
         self.client.get("/ListeCrypto")
         sleep(2)
-        crypto_data = get_crypto()
-        choice = [c['id'] for c in crypto_data]  
+        choice = ['bitcoin','ethereum','tether']  
         crypto_id = random.choice(choice)
         self.client.get(f"/GraphCrypto?id={crypto_id}")
         sleep(2)
