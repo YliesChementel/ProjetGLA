@@ -17,6 +17,11 @@ def mock_send_email():
         yield mock_send_email
 
 @pytest.fixture
+def client(app):
+    """Fixture pour fournir un client de test Flask."""
+    return app.test_client()
+
+@pytest.fixture
 def app():
     app = Flask(__name__)
     app.config['TESTING'] = True
