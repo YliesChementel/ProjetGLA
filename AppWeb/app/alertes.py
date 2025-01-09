@@ -72,22 +72,21 @@ def check_alerts(app):
                 if time_diff < timedelta(minutes=alerte.time):
                     continue
             
-            # Vérifier si l'alerte doit être déclenchée
             if alerte.condition == 'price':
-                current_price = crypto_data[-1]['price']  # Dernier prix
+                current_price = crypto_data[-1]['price']  
                 if alerte.type_alert == 'greater_than' and current_price > alerte.threshold_value:
                     send_email_alert(alerte, current_price,"price")
                 elif alerte.type_alert == 'less_than' and current_price < alerte.threshold_value:
                     send_email_alert(alerte, current_price,"price")
             if alerte.condition == 'volume':
-                current_volume = crypto_data[-1]['volume']  # Dernier volume
+                current_volume = crypto_data[-1]['volume']
 
                 if alerte.type_alert == 'greater_than' and current_volume > alerte.threshold_value:
                     send_email_alert(alerte, current_volume, 'volume')
                 elif alerte.type_alert == 'less_than' and current_volume < alerte.threshold_value:
                     send_email_alert(alerte, current_volume, 'volume')
             if alerte.condition == 'marketCap':
-                current_market_cap = crypto_data[-1]['marketCap']  # Dernière capitalisation
+                current_market_cap = crypto_data[-1]['marketCap']
 
                 if alerte.type_alert == 'greater_than' and current_market_cap > alerte.threshold_value:
                     send_email_alert(alerte, current_market_cap, 'marketCap')

@@ -25,12 +25,12 @@ def client(app):
 def app():
     app = Flask(__name__)
     app.config['TESTING'] = True
-    app.config['SECRET_KEY'] = 'test_secret_key'  # Add a secret key for tests
+    app.config['SECRET_KEY'] = 'test_secret_key'
     app = create_app('testing')
     with app.app_context():
-        db.create_all()  # Create the database for testing
+        db.create_all()
         yield app
-        db.drop_all()  # Clean up the database after tests
+        db.drop_all()
     return app
 
 
@@ -46,7 +46,6 @@ def new_user(app):
 @pytest.fixture
 def new_crypto(app):
     with app.app_context():  
-        # Créer une instance de Crypto
         crypto = Crypto(id='1', symbol='BTC', name='Bitcoin')
         db.session.add(crypto)
         db.session.commit()
@@ -55,7 +54,6 @@ def new_crypto(app):
 @pytest.fixture
 def new_alert(new_user, new_crypto, app):
     with app.app_context():
-        # Réattacher les objets User et Crypto à la session
         user = db.session.merge(new_user)
         crypto = db.session.merge(new_crypto)
         
@@ -74,8 +72,6 @@ def test_create_alerte_and_send_email(client, new_user, new_crypto,new_alert, mo
         new_user = db.session.merge(new_user)
         new_crypto = db.session.merge(new_crypto)
 
-
-    # Créer une alerte via une requête POST
     response = client.post('/Alertes', data={
             'crypto_id': new_crypto.id,
             'condition': 'price',
@@ -89,11 +85,9 @@ def test_create_alerte_and_send_email(client, new_user, new_crypto,new_alert, mo
     with app.app_context():
         new_alert =  db.session.merge(new_alert)
 
-    # Simuler une mise à jour de la valeur de la crypto
     current_value = 12000.0
     alert_type = 'greater_than'
     
-    # Appeler la fonction qui traite l'alerte et envoie un email
     with app.app_context():
         new_alert =  db.session.merge(new_alert)
         send_email_alert(new_alert, current_value, alert_type) 
@@ -110,7 +104,6 @@ def test_create_alerte_and_send_email(client, new_user, new_crypto,new_alert, mo
 def test_create_and_authenticate_user(client):
     """Test d'intégration pour la création et l'authentification d'un utilisateur"""
     
-    # Créer un utilisateur via une requête POST
     response = client.post('/Inscription', data={
         'username': 'testuser',
         'email': 'testuser@example.com',

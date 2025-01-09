@@ -7,12 +7,11 @@ services:
     volumes:
       - db-volume:/shared/instance
     environment:
-      - FLASK_ENV=development
       - DATABASE_URL=sqlite:///Utilisateur.db
       - EMAIL_USER=cryptofrontiersnotif@gmail.com
       - EMAIL_PASSWORD=wgks xsao gjkx npqq 
       - SECRET_KEY=your_secret_key
-      - DB_PATH=/shared/instance/Crypto.db  # Définir la variable d'environnement pour Python
+      - DB_PATH=/shared/instance/Crypto.db
     networks:
       - flask-net
 
@@ -24,7 +23,7 @@ services:
     volumes:
       - db-volume:/shared/instance
     environment:
-      - DB_PATH=/shared/instance/Crypto.db  # Définir la variable d'environnement pour Java
+      - DB_PATH=/shared/instance/Crypto.db
     restart: always
     networks:
       - flask-net

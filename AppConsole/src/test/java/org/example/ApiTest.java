@@ -128,7 +128,6 @@ class ApiTest {
         when(mockResponse.statusCode()).thenReturn(400);
         when(mockClient.send(mockRequest, HttpResponse.BodyHandlers.ofString())).thenReturn(mockResponse);
 
-        // Créer un spy sur l'instance api pour vérifier l'exécution
         Api apiSpy = spy(api);
 
         apiSpy.apiRun(conn, mockClient, mockRequest,1);
@@ -170,7 +169,7 @@ class ApiTest {
             // Gestion des exceptions de l'exécution de la tâche
             e.printStackTrace();
         } finally {
-            executor.shutdown();  // Assurez-vous de fermer l'exécuteur
+            executor.shutdown();
         }
 
 

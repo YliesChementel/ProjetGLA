@@ -30,16 +30,16 @@ def test_send_email_alert_invalid_alert_type(app):
         alert_type = "invalid_alert_type"
         current_value = 10000
 
-        # Mock the send_email function
+        # Mock la fonction send_email
         with mock.patch('app.alertes.send_email') as mock_send_email, \
-             mock.patch('builtins.print') as mock_print:  # Mock print to capture the warning message
+             mock.patch('builtins.print') as mock_print:  # Mock print pour capture les message d'avertissement
             send_email_alert(alerte, current_value, alert_type)
 
-            # Check that send_email was called with the expected arguments
+            # Veérifier que le send_email à été appelé
             expected_subject = f"Alerte pour Bitcoin - {alert_type}"
             expected_body = f"Alerte pour Bitcoin - Valeur: {current_value} (type inconnu)"
             mock_send_email.assert_called_once_with(expected_subject, expected_body, "testuser@example.com")
 
-            # Check that the warning message was printed
+            # vérifier que l'avertissement est appelé
             mock_print.assert_called_once_with(f"Warning: alert_type '{alert_type}' non reconnu, envoi d'un message générique.")
 

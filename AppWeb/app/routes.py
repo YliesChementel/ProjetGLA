@@ -63,9 +63,8 @@ def edit_alert(alerte_id):
         alerte.threshold_value = float(request.form['threshold_value'])
         alerte.type_alert = request.form['type_alert']
         alerte.time = int(request.form['time'])
-        alerte.last_sent = None  # Réinitialiser le dernier envoi si nécessaire
+        alerte.last_sent = None
         
-        # Sauvegarder les modifications
         db.session.commit()
         flash('Alerte mise à jour avec succès!', 'success')
     else:
@@ -80,16 +79,15 @@ def delete_alert(alerte_id):
     alerte = Alerte.query.filter_by(id=alerte_id, user_id=current_user.id).first()
     
     if alerte:
-        # Supprimer l'alerte
         db.session.delete(alerte)
         db.session.commit()
-    return redirect(url_for('main.profil'))  # Rediriger l'utilisateur vers la page du profil
+    return redirect(url_for('main.profil'))
 
 @main.route('/logout')
-@login_required  # S'assure que l'utilisateur est connecté avant de pouvoir se déconnecter
+@login_required
 def logout():
     logout_user()  # Déconnecte l'utilisateur
-    return redirect(url_for('main.index'))  # Redirige l'utilisateur vers la page d'accueil ou une autre page
+    return redirect(url_for('main.index')) 
 
 
 @main.route('/Alertes', methods=['GET', 'POST'])
@@ -104,7 +102,6 @@ def Alertes():
         time = request.form['time']
         type_alert = request.form['type_alert']  # 'greater_than', 'less_than', etc.
         
-        # Créer une nouvelle alerte pour l'utilisateur
         new_alert = Alerte(user_id=current_user.id, 
                            crypto_id=crypto_id, 
                            condition=condition, 
@@ -118,7 +115,7 @@ def Alertes():
         flash('Alerte créée avec succès!', 'success')
         return redirect(url_for('main.index'))
 
-    tableCrypto = get_last_data() # Récupérer la liste des cryptomonnaies
+    tableCrypto = get_last_data()
     cryptos = []
     for row in tableCrypto :
         cryptos.append(row['crypto_id'])
@@ -136,7 +133,6 @@ def ListeCrypto():
 def GraphCrypto():
     id = request.args.get('id')
     
-    # Récupérer la plage de temps sélectionnée par l'utilisateur
     time_range = request.args.get('time_range')
     
     # Calculer la date de début en fonction de la plage de temps
@@ -151,18 +147,14 @@ def GraphCrypto():
     else:
         start_date = None  # Par défaut, on affiche les données récentes
     
-    # Appeler la fonction pour récupérer les données filtrées
     crypto_data = get_crypto_data(id, start_date=start_date)
     
-    # Créer les graphiques
     PriceGraph = createCryptoGraph(crypto_data, id, "price")
     PredictGraph = createPredictGraph(crypto_data, id)
     VolumeGraph = createCryptoGraph(crypto_data, id, "volume")
     CandlestickGraph = createCandlestickGraph(crypto_data, id)
     HeatmapGraph = createHeatmap(crypto_data, id)
 
-    
-    # Convertir les graphiques en HTML
     PriceGraph_html = pio.to_html(PriceGraph, full_html=False)
     VolumeGraph_html = pio.to_html(VolumeGraph, full_html=False)
     CandlestickGraph_html = pio.to_html(CandlestickGraph, full_html=False)

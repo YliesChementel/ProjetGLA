@@ -58,8 +58,7 @@ def test_set_password(new_user):
 def test_check_password(new_user,app):
     """Test la méthode check_password pour l'utilisateur"""
     with app.app_context():
-        # Ensure that the user is attached to the session by merging it
-        user = db.session.merge(new_user)  # This will reattach the user to the session
+        user = db.session.merge(new_user)
         assert user.check_password('testpassword')
         assert not user.check_password('wrongpassword')
 

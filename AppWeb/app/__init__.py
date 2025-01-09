@@ -26,7 +26,7 @@ def create_app(config_name):
     
 
     if config_name == 'testing':
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Utiliser une base de données en mémoire pour les tests
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         app.config['TESTING'] = True
 

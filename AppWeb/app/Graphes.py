@@ -9,7 +9,6 @@ def createCryptoGraph(cryptoData_data, crypto_id, graph_type):
     date = defaultdict(list)
     data_values = defaultdict(list)
 
-    # Remplir les données en fonction du type de graphique
     for data in cryptoData_data:
         date[crypto_id].append(data['fetchTime'])
         if graph_type == 'price':
@@ -19,7 +18,6 @@ def createCryptoGraph(cryptoData_data, crypto_id, graph_type):
         else:
             raise ValueError("graph_type doit être 'price' ou 'volume'.")
 
-    # Définir le titre et l'axe Y en fonction du type de graphique
     if graph_type == 'price':
         title = f"Évolution du Prix du {crypto_id}"
         yaxis_title = 'Prix (USD)'
@@ -27,7 +25,6 @@ def createCryptoGraph(cryptoData_data, crypto_id, graph_type):
         title = f"Évolution du Volume du {crypto_id}"
         yaxis_title = 'Volume'
 
-    # Création du graphique avec Plotly
     fig = go.Figure(
         data=[go.Scatter(x=date[crypto_id], y=data_values[crypto_id], name=f"{graph_type.capitalize()} {crypto_id}")],
         layout={
@@ -57,7 +54,6 @@ def createPredictGraph(cryptoData_data, crypto_id):
     # Calculer la régression linéaire
     model, predictions = calculate_linear_regression(price, date)
 
-    # Créer le graphique des prédictions
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=date, y=price, mode='lines', name='Prix Réel', line=dict(color='blue', dash='dot')))
     fig.add_trace(go.Scatter(x=date, y=sma, mode='lines', name='Moyenne Mobile (5 jours)', line=dict(color='orange')))
