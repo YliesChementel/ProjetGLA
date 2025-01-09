@@ -8,6 +8,8 @@ def get_db_connection():
     load_dotenv()
     """Retourne une connexion à la base de données."""
     db_path = os.getenv('DB_PATH', '../instance/Crypto.db')
+    if not os.path.exists(db_path):
+        print(f"Warning: The database path '{db_path}' does not exist!")
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
