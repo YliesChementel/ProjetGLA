@@ -25,7 +25,7 @@ jobs:
           pip install pytest pytest-cov
       
       - name: Check database 
-        run: ls ProjetGLA/
+        run: ls
       
       - name: Check database file
         run: ls -l ProjetGLA/instance/Crypto.db
