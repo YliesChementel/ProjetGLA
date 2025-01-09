@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: console
-        image: your-dockerhub-username/appconsole:latest  # Remplacez par votre image Docker
+        image: ylies/appconsole:latest
         ports:
         - containerPort: 8080
         env:

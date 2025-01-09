@@ -1,4 +1,3 @@
-# web-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +15,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: ylies/appweb:latest  # Remplacez par votre image Docker
+        image: ylies/appweb:latest
         ports:
         - containerPort: 5000
         env:
