@@ -1,0 +1,54 @@
+# web-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: crypto-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: ylies/appweb:latest  # Remplacez par votre image Docker
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLASK_ENV
+          value: development
+        - name: DATABASE_URL
+          value: sqlite:///Utilisateur.db
+        - name: EMAIL_USER
+          value: cryptofrontiersnotif@gmail.com
+        - name: EMAIL_PASSWORD
+          value: wgks xsao gjkx npqq
+        - name: SECRET_KEY
+          value: your_secret_key
+        - name: DB_PATH
+          value: /shared/instance/Crypto.db
+        volumeMounts:
+        - name: db-volume
+          mountPath: /shared/instance
+      volumes:
+      - name: db-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  namespace: crypto-app
+spec:
+  selector:
+    app: web
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+  type: NodePort

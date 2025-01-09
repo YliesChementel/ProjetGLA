@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: console
+  namespace: crypto-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: console
+  template:
+    metadata:
+      labels:
+        app: console
+    spec:
+      containers:
+      - name: console
+        image: your-dockerhub-username/appconsole:latest  # Remplacez par votre image Docker
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_PATH
+          value: /shared/instance/Crypto.db
+        volumeMounts:
+        - name: db-volume
+          mountPath: /shared/instance
+      volumes:
+      - name: db-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: console-service
+  namespace: crypto-app
+spec:
+  selector:
+    app: console
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort
