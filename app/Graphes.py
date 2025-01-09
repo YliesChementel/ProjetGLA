@@ -47,6 +47,10 @@ def createPredictGraph(cryptoData_data, crypto_id):
     price = [data['price'] for data in cryptoData_data]
     date = [data['fetchTime'] for data in cryptoData_data]
 
+    if(price==[]):
+        price=[0]
+        date=[0]
+
     # Calculer les prévisions de la moyenne mobile
     sma = calculate_sma(price, window=5)  # Utilisation d'une fenêtre de 5 jours pour la SMA
 
