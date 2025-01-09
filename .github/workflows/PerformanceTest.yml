@@ -33,7 +33,7 @@ jobs:
           FLASK_ENV: production
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DATABASE_URL: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
-          DB_PATH: ${{ secrets.DB_PATH }}
+          DB_PATH: /home/runner/work/ProjetGLA/ProjetGLA/instance/Crypto.db
           API_KEY: ${{ secrets.API_KEY }}
 
       - name: Wait for Flask to start
