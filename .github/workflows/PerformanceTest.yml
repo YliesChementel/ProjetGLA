@@ -24,6 +24,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./AppWeb/requirements.txt
           pip install locust
+      - name: Check if database exists
+        run: |
+          if [ ! -f /home/runner/work/ProjetGLA/ProjetGLA/instance/Crypto.db ]; then
+            echo "Database file does not exist!";
+            exit 1;
+          fi
 
       - name: Start Flask server
         run: |
@@ -33,7 +39,7 @@ jobs:
           FLASK_ENV: production
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DATABASE_URL: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
-          DB_PATH: ${{ secrets.DB_PATH }}
+          DB_PATH: /home/runner/work/ProjetGLA/ProjetGLA/instance/Crypto.db
           API_KEY: ${{ secrets.API_KEY }}
 
       - name: Wait for Flask to start
