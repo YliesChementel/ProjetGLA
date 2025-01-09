@@ -2,6 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from apscheduler.schedulers.background import BackgroundScheduler
+from dotenv import load_dotenv
+import os
 
 def schedule_alerts(app):
     from .alertes import check_new_crypto_data  # Importer après les configurations de db sinon bug
@@ -14,10 +16,14 @@ def schedule_alerts(app):
 db = SQLAlchemy()
 
 def create_app(config_name):
+
+    load_dotenv()
+
     app = Flask(__name__)
     
     # Charger la configuration
-    app.config['SECRET_KEY'] = 'your_secret_key'
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    
 
     if config_name == 'testing':
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Utiliser une base de données en mémoire pour les tests
@@ -25,7 +31,7 @@ def create_app(config_name):
         app.config['TESTING'] = True
 
     if config_name == 'user':
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Utilisateur.db'
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # désactive les modifications inutiles
     

@@ -31,6 +31,9 @@ jobs:
         env:
           FLASK_APP: run.py
           FLASK_ENV: production
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
 
       - name: Wait for Flask to start
         run: |

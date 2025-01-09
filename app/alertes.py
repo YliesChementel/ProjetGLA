@@ -3,13 +3,16 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from sqlalchemy.orm import joinedload
+from dotenv import load_dotenv
+import os
 from .models import  db, Alerte  
 from .Connexion_Crypto import get_crypto_data, get_db_connection
 
 
 def send_email(subject, body, to_email):
-    from_email = "cryptofrontiersnotif@gmail.com"
-    password = "wgks xsao gjkx npqq "
+    load_dotenv()
+    from_email = os.getenv('EMAIL_USER')
+    password = os.getenv('EMAIL_PASSWORD')
 
     msg = MIMEMultipart()
     msg['From'] = from_email
@@ -47,7 +50,6 @@ def check_new_crypto_data(app):
         print("Nouvelles données détectées")
         # Sélectionne uniquement la dernière ligne des nouvelles données
         last_row = new_data[0]
-        print(last_row)
         check_alerts(app)
 
     conn.close()
