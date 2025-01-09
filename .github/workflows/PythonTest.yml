@@ -25,10 +25,10 @@ jobs:
           pip install pytest pytest-cov
       
       - name: Check database 
-        run: ls -l ../instance
+        run: ls -l ProjetGLA/instance/Crypto.db
       
       - name: Check database file
-        run: ls -l ../instance/Crypto.db
+        run: ls -l ProjetGLA/instance/Crypto.db
 
       - name: Run tests
         run: PYTHONPATH=AppWeb pytest --cov=app AppWeb/tests/
