@@ -25,7 +25,6 @@ MarkupSafe==2.1.5
 msgpack==1.1.0
 numpy==1.24.4
 packaging==24.2
-pkg_resources==0.0.0
 plotly==5.24.1
 pluggy==1.5.0
 psutil==6.1.1
