@@ -23,6 +23,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./AppWeb/requirements.txt
           pip install pytest pytest-cov
+      
+      - name: Check database 
+        run: ls -l ../instance
+      
+      - name: Check database file
+        run: ls -l ../instance/Crypto.db
 
       - name: Run tests
         run: PYTHONPATH=AppWeb pytest --cov=app AppWeb/tests/
