@@ -34,3 +34,4 @@ jobs:
         run: PYTHONPATH=AppWeb pytest --cov=app AppWeb/tests/
         env:
           DB_PATH: ${{ secrets.DB_PATH }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
