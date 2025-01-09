@@ -17,6 +17,7 @@ class CryptoUser(HttpUser):
     def list_crypto(self):
         """Test de la page de la liste des cryptomonnaies"""
         db_path = os.getenv('DB_PATH', '../instance/Crypto.db')
+        print("test    :    ",db_path)
         if not os.path.exists(db_path):
             print(f"Warning: The database path '{db_path}' does not exist!")
         self.client.get("/ListeCrypto")
