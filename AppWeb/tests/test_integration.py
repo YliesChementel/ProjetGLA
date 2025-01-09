@@ -25,11 +25,12 @@ def client(app):
 def app():
     app = Flask(__name__)
     app.config['TESTING'] = True
+    app.config['SECRET_KEY'] = 'test_secret_key'  # Add a secret key for tests
     app = create_app('testing')
     with app.app_context():
-        db.create_all()  # Créer la base de données pour les tests
+        db.create_all()  # Create the database for testing
         yield app
-        db.drop_all()  # Nettoyer la base de données après les tests
+        db.drop_all()  # Clean up the database after tests
     return app
 
 
